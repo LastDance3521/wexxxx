@@ -410,16 +410,9 @@
 <body>
 
     <!-- Arka Plan Müziği -->
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="auto" autoplay>
         <source src="xplay.mp3" type="audio/mpeg">
     </audio>
-
-    <!-- ═══ SPLASH: Siteye Gir Ekranı ═══ -->
-    <div class="splash" id="splash">
-        <img src="logo.png" alt="Logo" class="splash-logo">
-        <div class="splash-title">Laugh Or Die</div>
-        <div class="splash-enter">Siteye Gir</div>
-    </div>
 
     <div class="page-wrapper">
 
@@ -483,17 +476,17 @@
 
     <script>
         const bgMusic = document.getElementById('bgMusic');
-        const splash = document.getElementById('splash');
         bgMusic.volume = 0.5;
 
-        // Splash'a tıklayınca: müzik başla + splash kaybol
-        splash.addEventListener('click', () => {
-            bgMusic.play();
-            splash.classList.add('hidden');
-        });
-        splash.addEventListener('touchstart', () => {
-            bgMusic.play();
-            splash.classList.add('hidden');
+        // Hemen çalmayı dene
+        bgMusic.play().catch(() => {
+            // Tarayıcı engellerse: fare hareketi, scroll, tıklama, dokunma - hangisi önce olursa
+            const events = ['mousemove','mousedown','touchstart','scroll','keydown','click'];
+            const startMusic = () => {
+                bgMusic.play();
+                events.forEach(e => document.removeEventListener(e, startMusic));
+            };
+            events.forEach(e => document.addEventListener(e, startMusic, {once: true}));
         });
     </script>
 </body>
