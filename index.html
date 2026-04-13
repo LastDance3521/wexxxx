@@ -477,49 +477,24 @@
     <script>
         const bgMusic = document.getElementById('bgMusic');
         bgMusic.volume = 0.5;
+        let started = false;
 
-        // === YÖNTEM 1: Doğrudan autoplay ===
-        const p1 = bgMusic.play();
-
-        // === YÖNTEM 2: Web Audio API ile zorla çal ===
-        let audioStarted = false;
-        function forcePlay() {
-            if (audioStarted) return;
-            audioStarted = true;
-            bgMusic.play().catch(() => {});
-            // Web Audio API ile de dene
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                if (ctx.state === 'suspended') ctx.resume();
-                const source = ctx.createMediaElementSource(bgMusic);
-                source.connect(ctx.destination);
-                bgMusic.play().catch(() => {});
-            } catch(e) {}
-        }
-
-        // === YÖNTEM 3: Engellendiyse en ufak etkileşimde başlat ===
-        if (p1 !== undefined) {
-            p1.then(() => { audioStarted = true; }).catch(() => {
-                const events = ['mousemove','mousedown','mouseenter','touchstart',
-                                'scroll','keydown','click','pointerdown','pointermove',
-                                'focus','visibilitychange'];
-                const start = () => {
-                    forcePlay();
-                    events.forEach(e => {
-                        document.removeEventListener(e, start);
-                        window.removeEventListener(e, start);
-                    });
-                };
-                events.forEach(e => {
-                    document.addEventListener(e, start, {once: true, passive: true});
-                    window.addEventListener(e, start, {once: true, passive: true});
-                });
+        function startMusic() {
+            if (started) return;
+            bgMusic.play().then(() => {
+                started = true;
+            }).catch(() => {
+                // Tarayıcı hala engelliyorsa sessizce bekle
             });
         }
 
-        // === YÖNTEM 4: Sayfa görünürlük değişikliğinde dene ===
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && !audioStarted) forcePlay();
+        // 1. Sayfa yüklenir yüklenmez çalmayı dene (Bazı tarayıcılarda çalışabilir)
+        window.addEventListener('DOMContentLoaded', startMusic);
+
+        // 2. Tarayıcı engellerse: Fare hareketi, ekrana dokunma veya kaydırma anında anında başlat
+        const events = ['click', 'mousemove', 'scroll', 'touchstart', 'keydown'];
+        events.forEach(eventType => {
+            document.addEventListener(eventType, startMusic, { once: true });
         });
     </script>
 </body>
