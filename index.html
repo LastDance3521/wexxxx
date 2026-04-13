@@ -502,8 +502,9 @@
         const events = ['click', 'mousemove', 'scroll', 'touchstart', 'keydown'];
         events.forEach(eventType => document.addEventListener(eventType, startMusic, { once: true }));
 
-        // Geri Sayım Mantığı (Örnek: 30 gün sonrası için)
-        const countDownDate = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
+        // Geri Sayım Mantığı (Gerçek ve Sabit Tarih)
+        // Platformun açılacağı hedef tarihi buraya girebilirsiniz.
+        const countDownDate = new Date("May 15, 2026 00:00:00").getTime();
         
         setInterval(function() {
             const now = new Date().getTime();
