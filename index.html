@@ -3,500 +3,522 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Laugh Or Die — Yeni nesil topluluk ve premium platform deneyimi çok yakında.">
+    <meta name="description" content="Laugh Or Die — Yeni platformumuz çok yakında yayında olacak. Yasal siber güvenlik eğitimleri, topluluk ve dahası.">
     <title>Laugh Or Die — Yakında Gelecek</title>
     <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg: #0a0a0c;
-            --card-bg: rgba(18, 18, 24, 0.9);
-            --border: rgba(255, 255, 255, 0.06);
-            --red: #e63946;
-            --red-dark: #991b1b;
-            --red-glow: rgba(230, 57, 70, 0.35);
-            --white: #f0f0f0;
-            --gray: #888;
-            --gray-dim: #555;
+            --bg-color: #070709;
+            --surface-color: rgba(20, 20, 26, 0.6);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --accent-red: #d32f2f;
+            --accent-dark: #7f0000;
+            --neon-glow: rgba(211, 47, 47, 0.4);
+            --text-main: #f5f5f5;
+            --text-muted: #9e9e9e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--white);
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ═══ WRAPPER ═══ */
-        .page-wrapper {
-            max-width: 1100px;
+        /* Ambient Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at 50% 0%, rgba(127, 0, 0, 0.15) 0%, transparent 60%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Noise Texture */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+            opacity: 0.025;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-            min-height: 100vh;
-            background: linear-gradient(180deg, rgba(15,15,20,1) 0%, rgba(30,10,15,0.6) 100%);
-            border-left: 1px solid var(--border);
-            border-right: 1px solid var(--border);
-            position: relative;
+            padding: 0 2rem;
         }
 
-        /* ═══ TOPBAR ═══ */
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.2rem 2.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-size: 0.85rem;
-            font-weight: 600;
+        section { padding: 6rem 0; position: relative; }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
             letter-spacing: 2px;
             text-transform: uppercase;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px; left: 50%;
+            transform: translateX(-50%);
+            width: 40px; height: 3px;
+            background: var(--accent-red);
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--neon-glow);
         }
 
-        .topbar-dot {
-            width: 10px; height: 10px;
-            background: var(--red);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--red-glow);
-            animation: pulseDot 2s ease-in-out infinite;
-        }
-
-        @keyframes pulseDot {
-            0%, 100% { box-shadow: 0 0 8px var(--red-glow); }
-            50% { box-shadow: 0 0 18px rgba(230, 57, 70, 0.7); }
-        }
-
-        .topbar-badge {
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            padding: 0.4rem 1rem;
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 4px;
-            color: var(--gray);
-            font-weight: 500;
-        }
-
-        /* ═══ HERO ═══ */
+        /* ═══ HERO SECTION ═══ */
         .hero {
-            display: flex;
-            align-items: center;
-            gap: 3rem;
-            padding: 4rem 2.5rem 3rem;
-        }
-
-        /* Logo Sol Taraf */
-        .hero-logo {
-            flex-shrink: 0;
-            position: relative;
-        }
-
-        .hero-logo img {
-            width: 280px;
-            height: 280px;
-            object-fit: contain;
-            position: relative;
-            z-index: 2;
-            filter: drop-shadow(0 0 25px rgba(230, 57, 70, 0.4));
-        }
-
-        .hero-logo::after {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 250px; height: 250px;
-            background: radial-gradient(circle, rgba(230,57,70,0.25) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: 1;
-            animation: breatheGlow 4s ease-in-out infinite;
-        }
-
-        @keyframes breatheGlow {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-        }
-
-        /* Sağ Taraf İçerik */
-        .hero-content {
-            flex: 1;
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            font-weight: 700;
-            font-style: italic;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #f0a0a0, #e63946);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-desc {
-            font-size: 0.95rem;
-            color: var(--gray);
-            line-height: 1.8;
-            margin-bottom: 1.8rem;
-            max-width: 480px;
-            font-weight: 300;
-        }
-
-        /* Etiketler */
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .tag {
-            font-size: 0.75rem;
-            padding: 0.4rem 1rem;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            color: var(--gray);
-            letter-spacing: 0.5px;
-            background: rgba(255,255,255,0.02);
-            transition: all 0.3s;
-        }
-
-        .tag:hover {
-            border-color: rgba(230,57,70,0.4);
-            color: var(--white);
-            background: rgba(230,57,70,0.08);
-        }
-
-        /* Butonlar */
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 0.8rem 2rem;
-            border-radius: 6px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.35s ease;
-            border: none;
-            display: inline-block;
-        }
-
-        .btn-red {
-            background: linear-gradient(135deg, var(--red-dark), var(--red));
-            color: #fff;
-            box-shadow: 0 0 20px var(--red-glow);
-        }
-
-        .btn-red:hover {
-            box-shadow: 0 0 35px rgba(230, 57, 70, 0.6);
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--white);
-            border: 1px solid rgba(255,255,255,0.15);
-        }
-
-        .btn-outline:hover {
-            border-color: rgba(230,57,70,0.5);
-            background: rgba(230,57,70,0.05);
-            transform: translateY(-2px);
-        }
-
-        /* ═══ FEATURES ═══ */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.2rem;
-            padding: 0 2.5rem 3rem;
-        }
-
-        .feature-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 1.8rem 1.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 3px; height: 100%;
-            background: var(--red);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .feature-card:hover {
-            border-color: rgba(230, 57, 70, 0.2);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
-
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-card h3 {
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--red);
-            margin-bottom: 0.8rem;
-        }
-
-        .feature-card p {
-            font-size: 0.85rem;
-            color: var(--gray);
-            line-height: 1.6;
-            font-weight: 300;
-        }
-
-        /* ═══ FOOTER ═══ */
-        .site-footer {
-            padding: 2rem 2.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .site-footer p {
-            font-size: 0.8rem;
-            color: var(--gray-dim);
-        }
-
-        .site-footer span {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            color: var(--gray);
-            font-weight: 700;
-        }
-
-        /* ═══ ANIMATIONS ═══ */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(25px);
-            animation: fadeUp 1s ease-out forwards;
-        }
-
-        .fade-in-delay-1 { animation-delay: 0.15s; }
-        .fade-in-delay-2 { animation-delay: 0.3s; }
-        .fade-in-delay-3 { animation-delay: 0.45s; }
-        .fade-in-delay-4 { animation-delay: 0.6s; }
-        .fade-in-delay-5 { animation-delay: 0.75s; }
-
-        @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ═══ RESPONSIVE ═══ */
-        @media (max-width: 768px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-                padding: 3rem 1.5rem 2rem;
-                gap: 2rem;
-            }
-            .hero-logo img { width: 200px; height: 200px; }
-            .hero-logo::after { width: 180px; height: 180px; }
-            .hero-title { font-size: 2.8rem; }
-            .hero-desc { max-width: 100%; }
-            .tags { justify-content: center; }
-            .hero-buttons { justify-content: center; }
-            .features {
-                grid-template-columns: 1fr;
-                padding: 0 1.5rem 2rem;
-            }
-            .topbar { padding: 1rem 1.5rem; }
-            .site-footer { padding: 1.5rem; text-align: center; }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title { font-size: 2.2rem; }
-            .hero-buttons { flex-direction: column; width: 100%; }
-            .btn { width: 100%; text-align: center; }
-        }
-
-        /* ═══ SPLASH SCREEN ═══ */
-        .splash {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #050507;
-            z-index: 9999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            min-height: 100vh;
+            text-align: center;
+            padding-top: 4rem;
+            animation: fadeIn 1.5s ease;
         }
 
-        .splash.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .splash-logo {
-            width: 140px; height: 140px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 30px rgba(230,57,70,0.5));
-            animation: splashPulse 2.5s ease-in-out infinite;
-            margin-bottom: 2rem;
-        }
-
-        .splash-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-style: italic;
-            background: linear-gradient(135deg, #f0a0a0, #e63946);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .logo-wrapper {
+            position: relative;
             margin-bottom: 2.5rem;
         }
 
-        .splash-enter {
-            font-size: 0.8rem;
-            letter-spacing: 5px;
+        .logo-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, var(--neon-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 1;
+            filter: blur(10px);
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        .hero-logo {
+            width: 250px;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+        }
+
+        .hero-main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            font-weight: 700;
+            font-style: italic;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff 30%, #b0b0b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-red);
+            letter-spacing: 8px;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.4);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 0.8rem 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 1rem;
+            font-weight: 300;
+        }
+
+        /* ═══ FEATURES SECTION ═══ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(211, 47, 47, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(211, 47, 47, 0.05);
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        /* ═══ EDUCATION SECTION (LAWFUL CYBER SECURITY) ═══ */
+        .edu-section {
+            background: linear-gradient(180deg, rgba(10,10,12,0) 0%, rgba(30,5,5,0.4) 50%, rgba(10,10,12,0) 100%);
+            border-top: 1px solid rgba(211, 47, 47, 0.1);
+            border-bottom: 1px solid rgba(211, 47, 47, 0.1);
+        }
+
+        .edu-box {
+            background: rgba(10, 10, 15, 0.8);
+            border-left: 4px solid var(--accent-red);
+            padding: 3rem;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .edu-warning {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(211, 47, 47, 0.08);
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 6px;
+        }
+
+        .edu-warning-text p {
+            font-size: 0.95rem;
+            color: #dcdcdc;
+            margin-bottom: 0.5rem;
+        }
+
+        .edu-warning-text p:last-child { margin-bottom: 0; }
+        .edu-warning-text strong { color: var(--accent-red); }
+
+        .edu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .edu-item {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .edu-item::before {
+            content: '♦';
+            color: var(--accent-red);
+            font-size: 0.8rem;
+        }
+
+        /* ═══ COUNTDOWN SECTION ═══ */
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .count-box {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .count-val {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .count-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0.5rem;
+        }
+
+        /* ═══ NEWSLETTER SECTION ═══ */
+        .newsletter {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .news-form {
+            display: flex;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .news-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
             border-radius: 4px;
-            animation: splashFade 2s ease-in-out infinite;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .news-input:focus { border-color: rgba(211, 47, 47, 0.5); }
+
+        .btn-submit {
+            padding: 0 2.5rem;
+            background: var(--accent-red);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        .splash:hover .splash-enter {
-            color: rgba(255,255,255,0.8);
-            border-color: rgba(230,57,70,0.5);
-            box-shadow: 0 0 15px rgba(230,57,70,0.2);
+        .btn-submit:hover {
+            background: #b71c1c;
+            box-shadow: 0 0 15px var(--neon-glow);
         }
 
-        @keyframes splashPulse {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(230,57,70,0.4)); transform: scale(1); }
-            50% { filter: drop-shadow(0 0 40px rgba(230,57,70,0.7)); transform: scale(1.05); }
+        /* ═══ SOCIAL & FOOTER ═══ */
+        .socials {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
         }
 
-        @keyframes splashFade {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+        .social-link {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .social-link:hover {
+            background: rgba(211, 47, 47, 0.1);
+            color: #fff;
+            border-color: rgba(211, 47, 47, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        .footer p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .footer .slogan { font-family: 'Playfair Display', serif; font-style: italic; color: #fff; }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            from { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+            to { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-main-title { font-size: 3.5rem; }
+            .news-form { flex-direction: column; }
+            .btn-submit { padding: 1rem; }
+            .edu-box { padding: 2rem 1.5rem; }
+            .countdown-container { gap: 1rem; flex-wrap: wrap; }
+            .count-box { width: 80px; height: 80px; }
+            .count-val { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Arka Plan Müziği -->
+    <!-- Müzik Sistemi -->
     <audio id="bgMusic" autoplay loop>
         <source src="xplay.mp3" type="audio/mpeg">
     </audio>
 
     <div class="page-wrapper">
-
-        <!-- ═══ TOPBAR ═══ -->
-        <header class="topbar fade-in">
-            <div class="topbar-left">
-                <div class="topbar-dot"></div>
-                <span>Laugh Or Die</span>
+        
+        <!-- HERO -->
+        <section class="hero container">
+            <div class="logo-wrapper">
+                <!-- Logoya kesinlikle dokunulmamış, filtre uygulanmamış orijinal hali eklendi. -->
+                <img src="logo.png" alt="Laugh Or Die Logo" class="hero-logo">
             </div>
-            <div class="topbar-badge">Yakında Gelecek</div>
-        </header>
+            
+            <h1 class="hero-main-title">Laugh Or Die</h1>
+            <h2 class="hero-subtitle">Yakında Gelecek</h2>
+            
+            <p class="hero-desc">Yeni platformumuz çok yakında yayında olacak.</p>
+            <p class="hero-desc">Topluluk, sohbet, içerik, yasal siber güvenlik eğitimleri ve daha fazlası çok yakında burada olacak.</p>
+        </section>
 
-        <!-- ═══ HERO ═══ -->
-        <section class="hero">
-            <div class="hero-logo fade-in fade-in-delay-1">
-                <img src="logo.png" alt="Laugh Or Die Logo">
+        <!-- ÖZELLİKLER -->
+        <section class="container">
+            <h2 class="section-title">Platform Dinamikleri</h2>
+            <div class="features-grid">
+                <div class="feature-card"><h3>Topluluk Alanı</h3></div>
+                <div class="feature-card"><h3>Yazılı Sohbet</h3></div>
+                <div class="feature-card"><h3>Sesli İletişim</h3></div>
+                <div class="feature-card"><h3>Özel İçerikler</h3></div>
+                <div class="feature-card"><h3>Eğitim Modülleri</h3></div>
+                <div class="feature-card"><h3>Yasal Siber Güvenlik Dersleri</h3></div>
             </div>
-            <div class="hero-content">
-                <h1 class="hero-title fade-in fade-in-delay-2">Laugh<br>Or Die</h1>
-                <p class="hero-desc fade-in fade-in-delay-3">
-                    Karanlık tasarım dili, güçlü topluluk yapısı ve premium platform hissiyle
-                    hazırlanan yeni alanımız çok yakında yayında. Satış bölümü, yazılı
-                    sohbet, sesli odalar ve özel kullanıcı paneli tek çatı altında buluşuyor.
-                </p>
-                <div class="tags fade-in fade-in-delay-4">
-                    <span class="tag">Satış Alanı</span>
-                    <span class="tag">Canlı Sohbet</span>
-                    <span class="tag">Sesli Odalar</span>
-                    <span class="tag">Üye Paneli</span>
-                    <span class="tag">Karanlık Premium Arayüz</span>
-                </div>
-                <div class="hero-buttons fade-in fade-in-delay-5">
-                    <a href="#" class="btn btn-red">Yakında Açılıyor</a>
-                    <a href="#" class="btn btn-outline">Topluluk Hazırlanıyor</a>
+        </section>
+
+        <!-- YASAL EGİTİM BÖLÜMÜ -->
+        <section class="edu-section">
+            <div class="container">
+                <h2 class="section-title">Yasal Siber Güvenlik Eğitimleri</h2>
+                
+                <div class="edu-box">
+                    <div class="edu-warning">
+                        <div class="edu-warning-text">
+                            <p><strong>YASAL VE ETİK UYARI:</strong> Platformumuzdaki tüm eğitimler tamamen <u>yasal ve etik</u> çerçevede sunulmaktadır.</p>
+                            <p>İçeriklerimiz sadece savunma, farkındalık, analiz ve güvenli laboratuvar eğitimi amaçlıdır. Gerçek sistemlere izinsiz erişim, zararlı yazılım geliştirme, veri hırsızlığı veya yasadışı faaliyetlere yönelik hiçbir içerik veya yönlendirme bulunmaz.</p>
+                        </div>
+                    </div>
+
+                    <div class="edu-grid">
+                        <div class="edu-item">Temel siber güvenlik farkındalığı</div>
+                        <div class="edu-item">Yasal OSINT mantığı</div>
+                        <div class="edu-item">Hesap ve şifre güvenliği</div>
+                        <div class="edu-item">2FA / MFA kullanımı</div>
+                        <div class="edu-item">Sosyal mühendislikten korunma</div>
+                        <div class="edu-item">Zararlı bağlantıları tanıma</div>
+                        <div class="edu-item">Güvenli cihaz kullanımı</div>
+                        <div class="edu-item">Web güvenliği temelleri</div>
+                        <div class="edu-item">Ağ güvenliği farkındalığı</div>
+                        <div class="edu-item">Güvenli test lab ortamları</div>
+                        <div class="edu-item">Savunma odaklı güvenlik analizleri</div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ═══ FEATURES ═══ -->
-        <section class="features">
-            <div class="feature-card fade-in fade-in-delay-3">
-                <h3>Topluluk</h3>
-                <p>Üyelerin etkileşim kurabileceği, özel alanlara erişebileceği modern ve güçlü yapı.</p>
-            </div>
-            <div class="feature-card fade-in fade-in-delay-4">
-                <h3>İletişim</h3>
-                <p>Yazılı sohbet ve sesli odalarla hızlı, akıcı ve canlı bir platform deneyimi.</p>
-            </div>
-            <div class="feature-card fade-in fade-in-delay-5">
-                <h3>Mağaza</h3>
-                <p>Ürünler, siparişler ve özel erişim alanlarıyla tek merkezden yönetilen sistem.</p>
+        <!-- GERİ SAYIM -->
+        <section class="container">
+            <h2 class="section-title">Şafak Sayıyoruz</h2>
+            <div class="countdown-container">
+                <div class="count-box"><span class="count-val" id="days">00</span><span class="count-label">Gün</span></div>
+                <div class="count-box"><span class="count-val" id="hours">00</span><span class="count-label">Saat</span></div>
+                <div class="count-box"><span class="count-val" id="minutes">00</span><span class="count-label">Dakika</span></div>
+                <div class="count-box"><span class="count-val" id="seconds">00</span><span class="count-label">Saniye</span></div>
             </div>
         </section>
 
-        <!-- ═══ FOOTER ═══ -->
-        <footer class="site-footer fade-in fade-in-delay-5">
-            <p><span>Laugh Or Die</span> — yeni nesil topluluk ve platform deneyimi</p>
+        <!-- HABERDAR OL -->
+        <section class="container newsletter">
+            <h2 class="section-title" style="margin-bottom: 1rem;">Erken Erişim</h2>
+            <p style="color: var(--text-muted);">Sistem açıldığında ilk senin haberin olsun.</p>
+            
+            <form class="news-form" onsubmit="event.preventDefault(); alert('Kayıt alındı. Hazırlıklar tamamlandığında bilgilendirileceksiniz.');">
+                <input type="email" class="news-input" placeholder="E-posta adresiniz..." required>
+                <button type="submit" class="btn-submit">Haberdar Ol</button>
+            </form>
+
+            <div class="socials">
+                <a href="#" class="social-link" title="Discord">DC</a>
+                <a href="#" class="social-link" title="Telegram">TG</a>
+                <a href="#" class="social-link" title="Instagram">IG</a>
+                <a href="#" class="social-link" title="YouTube">YT</a>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer container">
+            <p>&copy; 2026 Laugh Or Die. Tüm hakları saklıdır.</p>
+            <p class="slogan">Legal education. Community. Communication.</p>
         </footer>
 
     </div>
 
+    <!-- Müzik ve Timer Scripti -->
     <script>
+        // Müzik Başlatıcı (Tarayıcı Engelini Aşmak İçin En Temiz Yöntem)
         const bgMusic = document.getElementById('bgMusic');
         bgMusic.volume = 0.5;
         let started = false;
 
         function startMusic() {
             if (started) return;
-            bgMusic.play().then(() => {
-                started = true;
-            }).catch(() => {
-                // Tarayıcı hala engelliyorsa sessizce bekle
-            });
+            bgMusic.play().then(() => { started = true; }).catch(() => { /* Bekle */ });
         }
 
-        // 1. Sayfa yüklenir yüklenmez çalmayı dene (Bazı tarayıcılarda çalışabilir)
         window.addEventListener('DOMContentLoaded', startMusic);
-
-        // 2. Tarayıcı engellerse: Fare hareketi, ekrana dokunma veya kaydırma anında anında başlat
         const events = ['click', 'mousemove', 'scroll', 'touchstart', 'keydown'];
-        events.forEach(eventType => {
-            document.addEventListener(eventType, startMusic, { once: true });
-        });
+        events.forEach(eventType => document.addEventListener(eventType, startMusic, { once: true }));
+
+        // Geri Sayım Mantığı (Örnek: 30 gün sonrası için)
+        const countDownDate = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
+        
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+            
+            let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }, 1000);
     </script>
 </body>
 </html>
