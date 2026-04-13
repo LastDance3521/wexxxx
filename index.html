@@ -438,6 +438,11 @@
 </head>
 <body>
 
+    <!-- Arka Plan Müziği - Döngüde, Kapatma Yok -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="xplay.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- Animated Particle Background -->
     <canvas id="bg-canvas"></canvas>
     <div class="scanlines"></div>
@@ -606,6 +611,29 @@
         }, { threshold: 0.15 });
 
         document.querySelectorAll('.feature-card').forEach(card => observer.observe(card));
+
+        // ── Arka Plan Müziği - Otomatik Başlat ──
+        const bgMusic = document.getElementById('bgMusic');
+        bgMusic.volume = 0.4;
+
+        // Otomatik çalmayı dene
+        const playAttempt = bgMusic.play();
+        if (playAttempt !== undefined) {
+            playAttempt.catch(() => {
+                // Tarayıcı engellerse, ilk tıklamada başlat
+                const startMusic = () => {
+                    bgMusic.play();
+                    document.removeEventListener('click', startMusic);
+                    document.removeEventListener('touchstart', startMusic);
+                    document.removeEventListener('keydown', startMusic);
+                    document.removeEventListener('scroll', startMusic);
+                };
+                document.addEventListener('click', startMusic);
+                document.addEventListener('touchstart', startMusic);
+                document.addEventListener('keydown', startMusic);
+                document.addEventListener('scroll', startMusic);
+            });
+        }
     </script>
 </body>
 </html>
