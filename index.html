@@ -51,6 +51,170 @@
         @keyframes scan {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
+        }
+
+        /* ═══ PREMIUM START OVERLAY ═══ */
+        #start-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000005;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #start-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        /* Animated grid inside overlay */
+        #start-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(229,9,20,0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(229,9,20,0.08) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: grid-shift 8s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes grid-shift {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(40px, 40px); }
+        }
+        /* Scanline overlay */
+        #start-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.3) 2px,
+                rgba(0,0,0,0.3) 4px
+            );
+            pointer-events: none;
+        }
+        .overlay-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            text-align: center;
+        }
+        /* Red corner borders */
+        .overlay-content::before, .overlay-content::after {
+            content: '';
+            position: absolute;
+            width: 40px; height: 40px;
+            border-color: var(--accent);
+            border-style: solid;
+        }
+        .overlay-content::before {
+            top: 0; left: 0;
+            border-width: 2px 0 0 2px;
+        }
+        .overlay-content::after {
+            bottom: 0; right: 0;
+            border-width: 0 2px 2px 0;
+        }
+        /* Biometric ring */
+        .bio-ring {
+            position: relative;
+            width: clamp(100px, 25vw, 140px);
+            height: clamp(100px, 25vw, 140px);
+        }
+        .bio-ring svg {
+            width: 100%; height: 100%;
+            animation: rotate-ring 4s linear infinite;
+        }
+        @keyframes rotate-ring {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .bio-ring-inner {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .bio-ring-inner svg {
+            width: 45%;
+            height: 45%;
+            animation: none;
+            fill: var(--accent);
+            filter: drop-shadow(0 0 8px var(--accent));
+        }
+        .overlay-title {
+            font-family: var(--font-mono);
+            font-size: clamp(1.4rem, 5vw, 2.4rem);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(229,9,20,0.6);
+            line-height: 1.2;
+        }
+        .overlay-title span {
+            color: var(--accent);
+        }
+        .overlay-subtitle {
+            font-family: var(--font-mono);
+            font-size: clamp(0.65rem, 2.5vw, 0.85rem);
+            color: #555;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        .enter-btn {
+            font-family: var(--font-mono);
+            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 5vw, 3rem);
+            background: rgba(229,9,20,0.05);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+        .enter-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+            z-index: -1;
+        }
+        .enter-btn:hover::before, .enter-btn:active::before { transform: scaleX(1); }
+        .enter-btn:hover, .enter-btn:active { color: #000; letter-spacing: 6px; }
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 5px rgba(229,9,20,0.3); }
+            50% { box-shadow: 0 0 25px rgba(229,9,20,0.7), inset 0 0 15px rgba(229,9,20,0.05); }
+        }
+        .status-line {
+            font-family: var(--font-mono);
+            font-size: clamp(0.6rem, 2vw, 0.75rem);
+            color: #333;
+            letter-spacing: 2px;
+        }
+        .status-line span { color: #00ff41; animation: blink-dot 1s step-end infinite; }
+        @keyframes blink-dot { 50% { opacity: 0; } }
+
         /* ═══ MAGIC UI AURORA & GRID BACKGROUND ═══ */
         .magic-bg {
             position: fixed;
@@ -529,6 +693,37 @@
 </head>
 <body>
 
+    <!-- Premium Start Overlay -->
+    <div id="start-overlay">
+        <div class="overlay-content">
+            <!-- Biometric Ring -->
+            <div class="bio-ring">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" stroke="rgba(229,9,20,0.15)" stroke-width="1"/>
+                    <circle cx="50" cy="50" r="45" stroke="#E50914" stroke-width="1.5"
+                        stroke-dasharray="60 224" stroke-linecap="round"/>
+                    <circle cx="50" cy="50" r="35" stroke="rgba(229,9,20,0.08)" stroke-width="1"/>
+                    <circle cx="50" cy="50" r="35" stroke="rgba(229,9,20,0.4)" stroke-width="0.8"
+                        stroke-dasharray="20 200" stroke-linecap="round"/>
+                </svg>
+                <div class="bio-ring-inner">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div>
+                <div class="overlay-title">LAUGH <span>OR</span> DIE</div>
+                <div class="overlay-subtitle">// Otonom Sistem v2.0</div>
+            </div>
+
+            <button class="enter-btn">[ SİSTEME GİRİŞ ]</button>
+
+            <div class="status-line">ENCRYPTED CHANNEL <span>●</span> READY</div>
+        </div>
+    </div>
+
     <div id="scanner-bar"></div>
 
     <!-- Müzik Sistemi -->
@@ -731,27 +926,26 @@
 
     <!-- SCRIPTS -->
     <script>
-        // --- 1. Müzik Başlatıcı (Saf Autoplay) ---
+        // --- 1. Premium Sistem Başlatıcı ---
         const bgMusic = document.getElementById('bgMusic');
+        const startOverlay = document.getElementById('start-overlay');
         bgMusic.volume = 0.5;
 
-        // Tarayıcı desteklediği an oynatmaya zorla
-        window.onload = function() {
-            setTimeout(function() {
-                bgMusic.play().catch(function(e) {
-                   console.warn("Autoplay block", e);
-                });
-            }, 100);
-        };
-        
-        // Gizli yedek tetikleyiciler (kullanıcı fareyi veya ekranı oynattığı an duyulması için)
-        const events = ['click', 'touchstart', 'mousemove', 'scroll', 'keydown']; 
-        events.forEach(eventType => {
-            document.addEventListener(eventType, function() {
-                if(bgMusic.paused) {
-                    bgMusic.play().catch(e=>e);
-                }
-            }, { passive: true });
+        function launchSystem() {
+            bgMusic.play().then(() => {
+                startOverlay.classList.add('hidden');
+                setTimeout(() => { startOverlay.style.display = 'none'; }, 900);
+            }).catch(() => {
+                // Ses çalamadı bile olsa overlay'i kapat
+                startOverlay.classList.add('hidden');
+                setTimeout(() => { startOverlay.style.display = 'none'; }, 900);
+            });
+        }
+
+        startOverlay.addEventListener('click', launchSystem);
+        startOverlay.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            launchSystem();
         });
 
         // --- 2. Hover Cursor Light Effect (Bento Cards Magic UI effect) ---
