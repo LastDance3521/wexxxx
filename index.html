@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Laugh Or Die — Yakında. Yasal siber güvenlik eğitimleri ve daha fazlası.">
-    <title>Laugh Or Die — SİSTEM BAŞLATILIYOR...</title>
+    <title>Laugh Or Die — OTONOM SİSTEM</title>
     <link rel="icon" type="image/png" href="logo.png">
     
     <!-- Fonts & Icons -->
@@ -15,13 +15,15 @@
     
     <style>
         :root {
-            --bg: #030305;
+            --bg: #000002;
             --accent: #E50914; /* Crimson Red */
             --accent-glow: rgba(229, 9, 20, 0.4);
             --text-main: #f0f0f0;
             --text-dim: #888;
             --font-mono: 'JetBrains Mono', monospace;
             --font-sans: 'Inter', sans-serif;
+            --surface-bg: rgba(15, 15, 20, 0.6);
+            --surface-border: rgba(255, 255, 255, 0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,11 +34,11 @@
             font-family: var(--font-sans);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            cursor: crosshair; /* Hacker style crosshair */
+            cursor: crosshair; 
             width: 100%;
         }
 
-        /* ═══ CYBER SCANNER BAR (EXTRA) ═══ */
+        /* ═══ CYBER SCANNER BAR ═══ */
         #scanner-bar {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 3px;
@@ -51,53 +53,73 @@
             100% { transform: translateX(100%); }
         }
 
-        /* ═══ GRID & CANVA BACKGROUND ═══ */
-        #matrixCanvas {
+        /* ═══ MAGIC UI AURORA & GRID BACKGROUND ═══ */
+        .magic-bg {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             z-index: -3;
-            opacity: 0.15;
+            background: var(--bg);
+            overflow: hidden;
             pointer-events: none;
         }
 
-        /* Ambient Glow */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80vw; height: 80vh;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
-            z-index: -2;
-            opacity: 0.3;
-            pointer-events: none;
-            filter: blur(80px);
+        /* Dot Grid */
+        .magic-grid {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+            background-size: 32px 32px;
+            /* Fade out edges using Webkit mask */
+            mask-image: radial-gradient(ellipse at center, black 10%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 80%);
+            opacity: 0.8;
+            z-index: 1;
         }
 
-        /* Scanline Overlay */
-        body::after {
+        /* Moving Aurora Orbs */
+        .aurora {
+            position: absolute;
+            width: 50vw; height: 50vw;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.6;
+            animation: move-aurora 25s infinite alternate ease-in-out;
+            z-index: 0;
+        }
+        .aurora-1 { 
+            top: -10%; left: -10%; 
+            background: radial-gradient(circle, rgba(229, 9, 20, 0.35) 0%, transparent 60%); 
+        }
+        .aurora-2 { 
+            bottom: -20%; right: -10%; 
+            animation-delay: -5s; 
+            background: radial-gradient(circle, rgba(140, 0, 20, 0.3) 0%, transparent 60%); 
+        }
+
+        @keyframes move-aurora {
+            0% { transform: scale(1) translate(0, 0); }
+            33% { transform: scale(1.1) translate(15%, 5%); }
+            66% { transform: scale(0.9) translate(-5%, -15%); }
+            100% { transform: scale(1.2) translate(-10%, 10%); }
+        }
+
+        /* Ambient scanline */
+        .magic-bg::after {
             content: '';
-            position: fixed;
+            position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(255,255,255,0),
-                rgba(255,255,255,0) 50%,
-                rgba(0,0,0,0.2) 50%,
-                rgba(0,0,0,0.2)
-            );
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.15) 50%);
             background-size: 100% 4px;
-            z-index: 9998;
-            pointer-events: none;
-            opacity: 0.15;
+            z-index: 2;
+            opacity: 0.4;
         }
 
         .container {
             width: 100%;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1.5rem; /* Better mobile padding */
+            padding: 2rem 1.5rem;
             position: relative;
             z-index: 10;
         }
@@ -123,12 +145,12 @@
         
         .glitch {
             position: relative;
-            font-size: clamp(3rem, 10vw, 5rem);
+            font-size: clamp(3rem, 10vw, 5.5rem);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: -2px;
             color: #fff;
-            text-shadow: 0 0 10px rgba(255,0,0,0.5);
+            text-shadow: 0 0 15px rgba(255,0,0,0.4);
             line-height: 1;
         }
 
@@ -136,7 +158,7 @@
             content: attr(data-text);
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg);
+            background: transparent;
             clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
         }
 
@@ -177,7 +199,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 90vh; /* Better mobile fit */
+            min-height: 90vh; 
             text-align: center;
             padding-top: 1rem;
             opacity: 1; 
@@ -186,7 +208,7 @@
 
         .hero-logo-box {
             position: relative;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             animation: float 6s ease-in-out infinite;
         }
 
@@ -199,9 +221,9 @@
             background: conic-gradient(from 0deg, transparent, var(--accent), transparent 40%);
             border-radius: 50%;
             z-index: -1;
-            animation: spin 4s linear infinite;
+            animation: spin 6s linear infinite;
             filter: blur(20px);
-            opacity: 0.5;
+            opacity: 0.7;
         }
 
         @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
@@ -211,8 +233,8 @@
         }
 
         .hero-logo {
-            width: clamp(140px, 25vw, 180px);
-            filter: drop-shadow(0 0 20px rgba(229, 9, 20, 0.5));
+            width: clamp(150px, 25vw, 190px);
+            filter: drop-shadow(0 0 25px rgba(229, 9, 20, 0.6));
             border-radius: 50%;
         }
 
@@ -220,31 +242,31 @@
             font-family: var(--font-mono);
             font-size: clamp(0.9rem, 3vw, 1.2rem);
             color: var(--accent);
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
         }
 
-        /* Simple Blurred Terminal (Original Preferred Model) */
+        /* Terminal Subtitle (Typewriter Line) */
         .terminal-subtitle {
             font-family: var(--font-mono);
             font-size: clamp(0.80rem, 2.8vw, 0.95rem);
             color: var(--text-main);
             width: 100%;
             max-width: 650px;
-            min-height: 95px; /* Mobilde uzun kelimelerin alttaki bileşenleri kaydırmasını önler */
-            margin: 1.5rem auto 0;
+            min-height: 95px; 
+            margin: 2rem auto 0;
             background: rgba(10,10,15,0.7);
             padding: 1.2rem 1.5rem;
             border: 1px solid rgba(229, 9, 20, 0.3);
             border-left: 4px solid var(--accent);
             text-align: left;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            border-radius: 6px;
             line-height: 1.6;
-            backdrop-filter: blur(8px);
-            word-wrap: break-word; /* Taşan kelimelerin kutu dışına çıkmasını engeller */
+            backdrop-filter: blur(12px);
+            word-wrap: break-word; 
             overflow: hidden;
         }
 
@@ -260,7 +282,7 @@
         }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* ═══ GLASSMORPHISM BENTO CARDS ═══ */
+        /* ═══ PRO BENTO GRIDS (DATA-DRIVEN) ═══ */
         .section-header {
             font-family: var(--font-mono);
             display: inline-block;
@@ -270,26 +292,27 @@
             text-transform: uppercase;
             position: relative;
             color: #fff;
+            letter-spacing: 2px;
         }
         .section-header::after {
             content: '';
             position: absolute;
-            left: 0; bottom: -8px; width: 50px; height: 3px;
+            left: 0; bottom: -8px; width: 60px; height: 3px;
             background: var(--accent);
-            box-shadow: 0 0 10px var(--accent);
+            box-shadow: 0 0 15px var(--accent);
         }
 
         .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
         }
 
         .bento-card {
-            background: rgba(20, 20, 25, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border-radius: 12px;
+            background: var(--surface-bg);
+            border: 1px solid var(--surface-border);
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
             padding: 2.5rem 2rem;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
@@ -297,11 +320,12 @@
             z-index: 1;
         }
 
+        /* Hover Inner Glow */
         .bento-card::before {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at center, rgba(229, 9, 20, 0.15) 0%, transparent 70%);
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(229, 9, 20, 0.1), transparent 40%);
             z-index: -1;
             opacity: 0;
             transition: opacity 0.4s ease;
@@ -309,8 +333,8 @@
 
         .bento-card:hover {
             transform: translateY(-8px) scale(1.02);
-            border-color: rgba(229, 9, 20, 0.4);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(229, 9, 20, 0.2);
+            border-color: rgba(229, 9, 20, 0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(229, 9, 20, 0.15);
         }
         .bento-card:hover::before { opacity: 1; }
 
@@ -318,27 +342,29 @@
             font-size: 2.5rem;
             color: var(--accent);
             margin-bottom: 1.5rem;
-            text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+            text-shadow: 0 0 15px rgba(229, 9, 20, 0.6);
+            display: block;
         }
 
         .bento-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
             color: #fff;
+            letter-spacing: 0.5px;
         }
 
         .bento-card p {
             font-size: 0.95rem;
             color: var(--text-dim);
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         /* ═══ COUNTDOWN (Cyberpunk Style) ═══ */
         .countdown-wrapper {
             display: flex;
             justify-content: center;
-            gap: 1rem; /* Better mobile fit */
+            gap: 1.2rem;
             flex-wrap: wrap;
         }
 
@@ -346,50 +372,51 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(10, 10, 15, 0.8);
+            background: rgba(10, 10, 15, 0.6);
             border: 1px solid rgba(229, 9, 20, 0.2);
             padding: 1.2rem;
-            min-width: clamp(70px, 18vw, 120px);
-            border-radius: 8px;
+            min-width: clamp(75px, 18vw, 130px);
+            border-radius: 12px;
             position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.4);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
         }
 
         .time-block::before {
             content: '';
             position: absolute;
             top: 0; left: 50%; transform: translateX(-50%);
-            width: 30px; height: 2px; background: var(--accent);
+            width: 40px; height: 3px; background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
         }
 
         .time-val {
             font-family: var(--font-mono);
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(2.2rem, 5vw, 4rem);
             font-weight: 700;
             color: #fff;
-            text-shadow: 0 0 15px var(--accent-glow);
+            text-shadow: 0 0 20px var(--accent-glow);
             line-height: 1;
         }
 
         .time-label {
-            font-size: clamp(0.6rem, 2vw, 0.8rem);
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             color: var(--text-dim);
-            margin-top: 0.5rem;
+            margin-top: 0.8rem;
         }
 
         /* ═══ NOTIFY FORM ═══ */
         .terminal-form {
             display: flex;
             width: 100%;
-            max-width: 550px;
-            background: rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 4px;
+            max-width: 600px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--surface-border);
+            border-radius: 6px;
             padding: 0.5rem;
             margin-top: 1.5rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
         }
         
         .terminal-form input {
@@ -398,32 +425,32 @@
             border: none;
             color: #fff; 
             font-family: var(--font-mono);
-            padding: 0.8rem 1rem;
+            padding: 1rem 1.5rem;
             outline: none;
             font-size: 1rem;
-            min-width: 0; /* Prevents mobile input overflow */
+            min-width: 0; 
         }
 
         .terminal-form input::placeholder {
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.25);
         }
 
         .terminal-form button {
-            background: transparent;
-            color: var(--accent);
+            background: var(--accent);
+            color: #fff;
             border: 1px solid var(--accent);
-            padding: 0.8rem 2rem;
+            padding: 0.8rem 2.5rem;
             font-family: var(--font-mono);
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            border-radius: 2px;
+            border-radius: 4px;
         }
 
         .terminal-form button:hover {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 0 15px var(--accent-glow);
+            background: transparent;
+            color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
         /* Footer */
@@ -432,9 +459,10 @@
             padding: 3rem 0;
             border-top: 1px solid rgba(255,255,255,0.05);
             font-family: var(--font-mono);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-dim);
-            margin-top: 2rem;
+            margin-top: 3rem;
+            letter-spacing: 1px;
         }
 
         @media (max-width: 768px) {
@@ -453,13 +481,18 @@
         <source src="trackkkk.mp3" type="audio/mpeg">
     </audio>
 
-    <canvas id="matrixCanvas"></canvas>
+    <!-- HAREKETLİ AURORA BGP (Matrix kalktı) -->
+    <div class="magic-bg">
+        <div class="aurora aurora-1"></div>
+        <div class="aurora aurora-2"></div>
+        <div class="magic-grid"></div>
+    </div>
 
     <div class="container">
         
         <!-- HERO -->
         <section class="hero visible">
-            <!-- Logonun orjinal bağlantısına hiç dokunmadık -->
+            <!-- Logonun orjinal bağlantısına dokunulmadı -->
             <div class="hero-logo-box">
                 <img src="logo.png" alt="Laugh Or Die" class="hero-logo">
             </div>
@@ -470,42 +503,41 @@
                 <h1 class="glitch" data-text="Laugh Or Die">Laugh Or Die</h1>
             </div>
 
-            <!-- Kullanıcının Sevdiği Yalın "Sözler/Terminal" Efekti -->
             <div class="terminal-subtitle">
                 <span id="typewriter"></span><span class="typing-cursor"></span>
             </div>
         </section>
 
-        <!-- BENTO GRID (FEATURES) -->
+        <!-- PRO BENTO GRID (DATA-DRIVEN AŞIRI PROFESYONEL ÖZELLİKLER) -->
         <section class="scroll-anim">
-            <h2 class="section-header">/Sistem_Modulleri</h2>
-            <div class="bento-grid">
+            <h2 class="section-header">/Çekirdek_Modulleri</h2>
+            <div class="bento-grid" id="cards-container">
                 <div class="bento-card">
-                    <i class="fa-solid fa-user-ninja"></i>
-                    <h3>Yasal Siber Güvenlik</h3>
-                    <p>Tamamen yasal çerçevede, etik laboratuvar ortamlarında siber savunma tekniklerini ve analizleri derinlemesine öğrenin.</p>
+                    <i class="fa-solid fa-network-wired"></i>
+                    <h3>P2P Kriptografik Otonom Ağ</h3>
+                    <p>Sıfır-log (zero-knowledge) prensibiyle çalışan uçtan uca şifrelenmiş altyapı. Üyeler arası P2P haberleşme sayesinde mutlak anonimlik ve maksimum mesaj gizliliği.</p>
                 </div>
                 <div class="bento-card">
-                    <i class="fa-solid fa-users-rays"></i>
-                    <h3>Kriptolu Topluluk Ağı</h3>
-                    <p>Alanında uzman kişilerle iletişim kurabileceğiniz güvenli, log tutmayan özel şifreli sohbet ve topluluk alanı.</p>
+                    <i class="fa-solid fa-flask-vial"></i>
+                    <h3>Uygulamalı Savunma Laboratuvarları</h3>
+                    <p>Gerçek dünya senaryolarını birebir yansıtan yasal siber lablar. Zararlı yazılım analizi (Malware Analysis), İleri OSINT istihbaratı ve 0-day güvenlik farkındalığı eğitimleri.</p>
                 </div>
                 <div class="bento-card">
-                    <i class="fa-solid fa-terminal"></i>
-                    <h3>Etkileşimli Terminal</h3>
-                    <p>Sistem içi gömülü zafiyet araçları ile anlık komut pratikleri ve pratik OSINT iletişim modülleri.</p>
+                    <i class="fa-solid fa-robot"></i>
+                    <h3>Sentetik Otonom Ajanlar (AI)</h3>
+                    <p>Sistemin altyapısına gömülmüş zafiyet tarama ajanları. Otonom yapay zeka entegrasyonu ile tehdit vektörlerini simüle eder ve anlık güvenlik istihbaratı raporlar.</p>
                 </div>
                 <div class="bento-card">
-                    <i class="fa-solid fa-shield-virus"></i>
-                    <h3>Farkındalık ve Savunma</h3>
-                    <p>Zararlı bağlantıları engelleme (Malware Analizi), 2FA/MFA kurulumları ve sistem pekiştirme temelleri.</p>
+                    <i class="fa-solid fa-fingerprint"></i>
+                    <h3>Çok Katmanlı Erişim Protokolleri</h3>
+                    <p>Uygulamaya üst düzey askeri seviyede güvenlik duvarları ile giriş yapılır. 2FA/MFA doğrulama mimarisi ile sızma ve paket izleme (sniffing) girişimleri tamamen engellenir.</p>
                 </div>
             </div>
         </section>
 
         <!-- COUNTDOWN -->
         <section class="scroll-anim" style="text-align: center;">
-            <h2 class="section-header" style="margin-bottom: 2rem;">/Safak_Zamani</h2>
+            <h2 class="section-header" style="margin-bottom: 2rem;">/Sistem_Aktivasyonu</h2>
             <div class="countdown-wrapper">
                 <div class="time-block"><span class="time-val" id="days">00</span><span class="time-label">Gün</span></div>
                 <div class="time-block"><span class="time-val" id="hours">00</span><span class="time-label">Saat</span></div>
@@ -516,16 +548,16 @@
 
         <!-- NOTIFY -->
         <section class="scroll-anim">
-            <h2 class="section-header">/Erisim_Talebi</h2>
-            <p style="color: var(--text-dim); max-width: 500px; margin-bottom: 1rem;">Sistem aktif olduğunda yetki erişimi almak için sinyal bırak.</p>
-            <form class="terminal-form" onsubmit="event.preventDefault(); alert('ERİŞİM TALEBİ ALINDI. [200 OK]');">
-                <input type="email" placeholder="kullanici@host..." required>
-                <button type="submit">EXECUTE_REQ</button>
+            <h2 class="section-header">/Çekirdek_Erisimi</h2>
+            <p style="color: var(--text-dim); max-width: 550px; margin-bottom: 1rem; font-size:0.95rem;">Otonom sistem açıldığında ana modüllere ilk giriş yetkisini kazanmak için sinyal bırakın.</p>
+            <form class="terminal-form" onsubmit="event.preventDefault(); alert('SİNYAL ALINDI. ENKRİPSİYON TAMAMLANDI. [200 OK]');">
+                <input type="email" placeholder="kullanici@node..." required>
+                <button type="submit">SİNYAL GÖNDER</button>
             </form>
         </section>
 
         <footer>
-            <span>&copy; 2026 Laugh Or Die. All Rights Reserved. // LOGGED OFF</span>
+            <span>&copy; 2026 Laugh Or Die. All Protocols Secured. // END OF LINE</span>
         </footer>
 
     </div>
@@ -539,14 +571,26 @@
 
         function startMusic() {
             if (started) return;
-            bgMusic.play().then(() => { started = true; }).catch(() => { /* Mobil izinler bekleniyor */ });
+            bgMusic.play().then(() => { started = true; }).catch(() => { /* Bekle */ });
         }
 
         window.addEventListener('DOMContentLoaded', startMusic);
-        const events = ['click', 'touchstart', 'scroll', 'keydown']; // Orijinal ve mobil fix uyumu
+        const events = ['click', 'touchstart', 'scroll', 'keydown']; 
         events.forEach(eventType => document.addEventListener(eventType, startMusic, { once: true, passive: true }));
 
-        // --- 2. Geri Sayım Mantığı ---
+        // --- 2. Hover Cursor Light Effect (Bento Cards Magic UI effect) ---
+        document.getElementById("cards-container").onmousemove = e => {
+            for(const card of document.getElementsByClassName("bento-card")) {
+                const rect = card.getBoundingClientRect(),
+                      x = e.clientX - rect.left,
+                      y = e.clientY - rect.top;
+
+                card.style.setProperty("--mouse-x", `${x}px`);
+                card.style.setProperty("--mouse-y", `${y}px`);
+            }
+        };
+
+        // --- 3. Geri Sayım Mantığı ---
         const countDownDate = new Date("May 15, 2026 00:00:00").getTime();
         setInterval(function() {
             const now = new Date().getTime();
@@ -562,7 +606,7 @@
             document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
         }, 1000);
 
-        // --- 3. Hacker Text Effect (Mobil Güvenli) ---
+        // --- 4. Hacker Text Effect (Mobil Güvenli) ---
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
         
         document.querySelectorAll('.hacker-text').forEach(element => {
@@ -593,7 +637,7 @@
             setTimeout(glitchIt, 800);
         });
 
-        // --- 4. Typewriter Quotes Effect (Önceki Modelin En İyi Hali) ---
+        // --- 5. Typewriter Quotes Effect (Pro Edition) ---
         const quotes = [
             "Bağlantı kuruluyor... Güvenlik protokolleri aktif.",
             "Yasal savunma mekanizmaları yükleniyor.",
@@ -638,7 +682,7 @@
         }
         setTimeout(typeWriter, 1200);
 
-        // --- 5. Scroll Animations ---
+        // --- 6. Scroll Animations ---
         const observerOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -652,54 +696,6 @@
         document.querySelectorAll('.scroll-anim').forEach((el) => {
             observer.observe(el);
         });
-
-        // --- 6. Matrix Code Rain (Mobil Fix & Limits) ---
-        const canvas = document.getElementById('matrixCanvas');
-        if(canvas) {
-            const ctx = canvas.getContext('2d');
-            
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            resize();
-            
-            let resizeTimer;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(resize, 200);
-            });
-
-            const chars = '01#$@&*'.split('');
-            const fontSize = 16;
-            let columns = window.innerWidth / fontSize;
-            let drops = [];
-            for(let x = 0; x < 200; x++) drops[x] = 1;
-
-            function drawMatrix() {
-                ctx.fillStyle = 'rgba(3, 3, 5, 0.08)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#E50914'; 
-                ctx.font = fontSize + 'px monospace';
-                
-                columns = canvas.width / fontSize;
-                
-                for(let i = 0; i < drops.length && i < columns; i++) {
-                    const text = chars[Math.floor(Math.random() * chars.length)];
-                    
-                    ctx.globalAlpha = Math.random() > 0.5 ? Math.random() * 0.5 + 0.1 : 0.1;
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    ctx.globalAlpha = 1.0;
-                    
-                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-            setInterval(drawMatrix, 50);
-        }
     </script>
 </body>
 </html>
