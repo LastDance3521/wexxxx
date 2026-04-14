@@ -228,13 +228,14 @@
         /* Simple Blurred Terminal (Original Preferred Model) */
         .terminal-subtitle {
             font-family: var(--font-mono);
-            font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+            font-size: clamp(0.80rem, 2.8vw, 0.95rem);
             color: var(--text-main);
             width: 100%;
             max-width: 650px;
+            min-height: 95px; /* Mobilde uzun kelimelerin alttaki bileşenleri kaydırmasını önler */
             margin: 1.5rem auto 0;
             background: rgba(10,10,15,0.7);
-            padding: 1.2rem;
+            padding: 1.2rem 1.5rem;
             border: 1px solid rgba(229, 9, 20, 0.3);
             border-left: 4px solid var(--accent);
             text-align: left;
@@ -243,6 +244,8 @@
             border-radius: 4px;
             line-height: 1.6;
             backdrop-filter: blur(8px);
+            word-wrap: break-word; /* Taşan kelimelerin kutu dışına çıkmasını engeller */
+            overflow: hidden;
         }
 
         .terminal-subtitle::before {
@@ -594,12 +597,11 @@
         const quotes = [
             "Bağlantı kuruluyor... Güvenlik protokolleri aktif.",
             "Yasal savunma mekanizmaları yükleniyor.",
-            "Güvenlik bir ürün değil, bir süreçtir.",
             "Sistemin ne kadar güvenli olduğu, yöneticisinin paranoyasına bağlıdır.",
-            "Eğer bir sistem çalışıyorsa, sistemde kesinlikle bir hata vardır.",
+            "Eğer bir sistem çalışıyorsa, sistemde kesinlikle bir yara vardır.",
             "Gerçek dünya bir illüzyon, her şey veriden ibaret.",
+            "Sistemlere değil, önce siber cehalete sızıyoruz.",
             "En tehlikeli açık, kodlarda değil insan psikolojisindedir.",
-            "Ship AI-powered products. (21st.dev)", // Added user requested reference
             "Laugh Or Die: Çünkü siber dünyada bilgisizlik, en büyük zafiyettir."
         ];
         
