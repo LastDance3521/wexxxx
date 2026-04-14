@@ -2,9 +2,9 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Laugh Or Die — Yakında. Yasal siber güvenlik eğitimleri ve daha fazlası.">
-    <title>Laugh Or Die — SİSTEM BAŞLATILIYOR...</title>
+    <title>Laugh Or Die — TERMINAL</title>
     <link rel="icon" type="image/png" href="logo.png">
     
     <!-- Fonts & Icons -->
@@ -15,11 +15,13 @@
     
     <style>
         :root {
-            --bg: #030305;
-            --accent: #E50914; /* Crimson Red */
-            --accent-glow: rgba(229, 9, 20, 0.4);
+            --bg: #000000;
+            --bg-surface: #0a0a0c;
+            --accent: #ff003c; /* Hyper Crimson */
+            --accent-glow: rgba(255, 0, 60, 0.4);
             --text-main: #f0f0f0;
-            --text-dim: #888;
+            --text-dim: #666;
+            --term-green: #00ff41;
             --font-mono: 'JetBrains Mono', monospace;
             --font-sans: 'Inter', sans-serif;
         }
@@ -32,61 +34,46 @@
             font-family: var(--font-sans);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            cursor: crosshair; /* Hacker style crosshair */
+            cursor: crosshair; 
         }
 
         /* ═══ GRID & CANVA BACKGROUND ═══ */
         #matrixCanvas {
             position: fixed;
             top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            width: 100%; height: 100%;
             z-index: -3;
-            opacity: 0.15;
+            opacity: 0.2;
             pointer-events: none;
         }
 
-        /* Ambient Glow */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80vw; height: 80vh;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
-            z-index: -2;
-            opacity: 0.3;
-            pointer-events: none;
-            filter: blur(80px);
-        }
-
-        /* Scanline Overlay */
+        /* Vignette & Scanlines */
         body::after {
             content: '';
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(
                 to bottom,
                 rgba(255,255,255,0),
                 rgba(255,255,255,0) 50%,
-                rgba(0,0,0,0.2) 50%,
-                rgba(0,0,0,0.2)
-            );
-            background-size: 100% 4px;
+                rgba(0,0,0,0.15) 50%,
+                rgba(0,0,0,0.15)
+            ), radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.8) 100%);
+            background-size: 100% 4px, 100% 100%;
             z-index: 9999;
             pointer-events: none;
-            opacity: 0.15;
         }
 
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 2rem 1.5rem;
             position: relative;
             z-index: 10;
         }
 
         section {
-            padding: 6rem 0;
+            padding: 5rem 0;
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.8s ease, transform 0.8s ease;
@@ -105,54 +92,13 @@
         
         .glitch {
             position: relative;
-            font-size: 5rem;
+            font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: -2px;
             color: #fff;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-        }
-
-        .glitch::before, .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg);
-            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-        }
-
-        .glitch::before {
-            left: 3px;
-            text-shadow: -2px 0 #00ffff;
-            animation: glitch-anim-1 2s infinite linear alternate-reverse;
-        }
-
-        .glitch::after {
-            left: -3px;
-            text-shadow: -2px 0 var(--accent);
-            animation: glitch-anim-2 3s infinite linear alternate-reverse;
-            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-        }
-
-        @keyframes glitch-anim-1 {
-            0% { clip-path: inset(20% 0 80% 0); }
-            20% { clip-path: inset(60% 0 10% 0); }
-            40% { clip-path: inset(40% 0 50% 0); }
-            60% { clip-path: inset(80% 0 5% 0); }
-            80% { clip-path: inset(10% 0 70% 0); }
-            100% { clip-path: inset(30% 0 50% 0); }
-        }
-
-        @keyframes glitch-anim-2 {
-            0% { clip-path: inset(10% 0 60% 0); }
-            20% { clip-path: inset(30% 0 20% 0); }
-            40% { clip-path: inset(70% 0 10% 0); }
-            60% { clip-path: inset(50% 0 30% 0); }
-            80% { clip-path: inset(5% 0 80% 0); }
-            100% { clip-path: inset(40% 0 40% 0); }
+            text-shadow: 0 0 20px rgba(255,0,60,0.4);
+            line-height: 1.1;
         }
 
         /* ═══ HERO ═══ */
@@ -161,10 +107,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            min-height: 90vh; /* Better for mobile */
             text-align: center;
-            padding-top: 2rem;
-            opacity: 1; /* override section default */
+            padding-top: 1rem;
+            opacity: 1; 
             transform: translateY(0);
         }
 
@@ -179,13 +125,13 @@
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 140%; height: 140%;
+            width: 130%; height: 130%;
             background: conic-gradient(from 0deg, transparent, var(--accent), transparent 40%);
             border-radius: 50%;
             z-index: -1;
-            animation: spin 4s linear infinite;
+            animation: spin 3s linear infinite;
             filter: blur(20px);
-            opacity: 0.5;
+            opacity: 0.6;
         }
 
         @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
@@ -195,47 +141,87 @@
         }
 
         .hero-logo {
-            width: 180px;
-            filter: drop-shadow(0 0 20px rgba(229, 9, 20, 0.5));
-            border-radius: 50%; /* in case it's squarish */
+            width: clamp(120px, 20vw, 180px);
+            filter: drop-shadow(0 0 20px rgba(255, 0, 60, 0.6));
+            border-radius: 50%; 
         }
 
         .hacker-text {
             font-family: var(--font-mono);
-            font-size: 1.2rem;
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
             color: var(--accent);
             letter-spacing: 4px;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
         }
 
-        /* Terminal style subtitle */
-        .terminal-subtitle {
-            font-family: var(--font-mono);
-            font-size: 0.95rem;
-            color: var(--text-main);
-            max-width: 650px;
-            margin: 1.5rem auto 0;
-            background: rgba(10,10,15,0.7);
-            padding: 1.2rem 1.5rem;
-            border: 1px solid rgba(229, 9, 20, 0.3);
-            border-left: 4px solid var(--accent);
+        /* ═══ REAL TERMINAL WINDOW ═══ */
+        .terminal-window {
+            width: 100%;
+            max-width: 700px;
+            background: #000;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            margin: 2rem auto 0;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255,0,60,0.1);
             text-align: left;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-radius: 4px;
-            line-height: 1.6;
         }
 
-        .terminal-subtitle::before {
-            content: 'root@laugh-or-die:~# ';
-            color: #00ff41; /* classic Matrix green for terminal prefix */
+        .terminal-header {
+            background: #111;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .terminal-body {
+            padding: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            height: 180px;
+            overflow-y: hidden;
+            position: relative;
+        }
+
+        .term-history {
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .term-line {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .term-prefix { color: var(--term-green); white-space: nowrap; }
+        .term-content { color: #fff; }
 
         .typing-cursor::after {
             content: '█';
             animation: blink 1s step-end infinite;
-            color: #00ff41;
+            color: var(--accent);
         }
         @keyframes blink { 50% { opacity: 0; } }
 
@@ -243,7 +229,7 @@
         .section-header {
             font-family: var(--font-mono);
             display: inline-block;
-            font-size: 1.8rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
             font-weight: 700;
             margin-bottom: 3rem;
             text-transform: uppercase;
@@ -265,9 +251,8 @@
         }
 
         .bento-card {
-            background: rgba(20, 20, 25, 0.4);
+            background: var(--bg-surface);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
             border-radius: 12px;
             padding: 2.5rem 2rem;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -280,7 +265,7 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at center, rgba(229, 9, 20, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle at center, rgba(255, 0, 60, 0.15) 0%, transparent 70%);
             z-index: -1;
             opacity: 0;
             transition: opacity 0.4s ease;
@@ -288,8 +273,8 @@
 
         .bento-card:hover {
             transform: translateY(-8px) scale(1.02);
-            border-color: rgba(229, 9, 20, 0.4);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(229, 9, 20, 0.2);
+            border-color: rgba(255, 0, 60, 0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(255, 0, 60, 0.2);
         }
         .bento-card:hover::before { opacity: 1; }
 
@@ -297,7 +282,7 @@
             font-size: 2.5rem;
             color: var(--accent);
             margin-bottom: 1.5rem;
-            text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+            text-shadow: 0 0 10px rgba(255, 0, 60, 0.5);
         }
 
         .bento-card h3 {
@@ -317,7 +302,7 @@
         .countdown-wrapper {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: clamp(0.5rem, 2vw, 1.5rem);
             flex-wrap: wrap;
         }
 
@@ -325,10 +310,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(10, 10, 15, 0.8);
-            border: 1px solid rgba(229, 9, 20, 0.2);
+            background: #050505;
+            border: 1px solid rgba(255, 0, 60, 0.2);
             padding: 1.5rem;
-            min-width: 120px;
+            min-width: clamp(70px, 15vw, 120px);
             border-radius: 8px;
             position: relative;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.4);
@@ -343,7 +328,7 @@
 
         .time-val {
             font-family: var(--font-mono);
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 6vw, 3.5rem);
             font-weight: 700;
             color: #fff;
             text-shadow: 0 0 15px var(--accent-glow);
@@ -351,9 +336,9 @@
         }
 
         .time-label {
-            font-size: 0.8rem;
+            font-size: clamp(0.6rem, 1.5vw, 0.8rem);
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             color: var(--text-dim);
             margin-top: 0.5rem;
         }
@@ -362,11 +347,11 @@
         .terminal-form {
             display: flex;
             max-width: 550px;
-            background: rgba(0,0,0,0.8);
+            background: #050505;
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 4px;
             padding: 0.5rem;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
         
@@ -379,6 +364,7 @@
             padding: 0.8rem 1rem;
             outline: none;
             font-size: 1rem;
+            width: 100%; /* Fix for mobile input width */
         }
 
         .terminal-form input::placeholder {
@@ -399,7 +385,7 @@
 
         .terminal-form button:hover {
             background: var(--accent);
-            color: #fff;
+            color: #000;
             box-shadow: 0 0 15px var(--accent-glow);
         }
 
@@ -412,22 +398,22 @@
             font-size: 0.8rem;
             color: var(--text-dim);
             margin-top: 2rem;
+            position: relative;
+            z-index: 10;
         }
 
         @media (max-width: 768px) {
-            .glitch { font-size: 3rem; }
-            .hero-logo { width: 140px; }
-            .time-block { min-width: 90px; padding: 1rem; }
-            .time-val { font-size: 2rem; }
             .terminal-form { flex-direction: column; gap: 0.5rem; }
             .terminal-form button { width: 100%; }
+            .terminal-body { height: 260px; font-size: 0.85rem; padding: 1rem; }
+            section { padding: 3rem 0; }
         }
     </style>
 </head>
 <body>
 
     <!-- Müzik Sistemi (Arka planda aynı mantık ile devam ediyor) -->
-    <iframe src="trackkkk.mp3" allow="autoplay" style="display:none"></iframe>
+    <iframe src="trackkkk.mp3" allow="autoplay" style="display:none" aria-hidden="true"></iframe>
     <audio id="bgMusic" autoplay loop>
         <source src="trackkkk.mp3" type="audio/mpeg">
     </audio>
@@ -443,20 +429,35 @@
                 <img src="logo.png" alt="Laugh Or Die" class="hero-logo">
             </div>
             
-            <div data-hacker-text="SYSTEM_INITIATING..." class="hacker-text">INITIATING...</div>
+            <div data-hacker-text="AGENT_REGISTRY_INIT" class="hacker-text">INITIATING...</div>
             
             <div class="glitch-wrapper">
                 <h1 class="glitch" data-text="Laugh Or Die">Laugh Or Die</h1>
             </div>
 
-            <div class="terminal-subtitle">
-                <span id="typewriter"></span><span class="typing-cursor"></span>
+            <!-- DARK TERMINAL WINDOW -->
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="terminal-title">bash — laugh-or-die — 80x24</div>
+                </div>
+                <div class="terminal-body" id="term-body">
+                    <div class="term-history">Last login: Tue 21st Dev 13:37:00 on ttys001</div>
+                    <div class="term-line">
+                        <span class="term-prefix">root@laugh-or-die:~#</span>
+                        <span class="term-content"><span id="typewriter"></span><span class="typing-cursor"></span></span>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- BENTO GRID (FEATURES) -->
         <section class="scroll-anim">
-            <h2 class="section-header">/Sistem.Modulleri</h2>
+            <h2 class="section-header">/Sistem_Modulleri</h2>
             <div class="bento-grid">
                 <div class="bento-card">
                     <i class="fa-solid fa-user-ninja"></i>
@@ -471,60 +472,61 @@
                 <div class="bento-card">
                     <i class="fa-solid fa-terminal"></i>
                     <h3>Etkileşimli Terminal</h3>
-                    <p>Sistem içi gömülü zafiyet araçları ile anlık komut pratikleri ve pratik OSINT iletişim modülleri.</p>
+                    <p>Sistem içi gömülü zafiyet test araçları (Autonomous Agents) ile pratik OSINT iletişim modülleri.</p>
                 </div>
                 <div class="bento-card">
                     <i class="fa-solid fa-shield-virus"></i>
-                    <h3>Farkındalık ve Savunma</h3>
-                    <p>Zararlı bağlantıları engelleme (Malware Analizi), 2FA/MFA kurulumları ve sistem pekiştirme temelleri.</p>
+                    <h3>Agentic Savunma (21st.dev)</h3>
+                    <p>Karmaşık güvenlik senaryolarını çözen hazır AI ajan entegrasyonu, 2FA/MFA kurulumları ve sistem pekiştirme.</p>
                 </div>
             </div>
         </section>
 
         <!-- COUNTDOWN -->
         <section class="scroll-anim" style="text-align: center;">
-            <h2 class="section-header" style="margin-bottom: 2rem;">/Safak.Zamani</h2>
+            <h2 class="section-header" style="margin-bottom: 2rem;">/Safak_Zamani</h2>
             <div class="countdown-wrapper">
-                <div class="time-block"><span class="time-val" id="days">00</span><span class="time-label">Gün</span></div>
-                <div class="time-block"><span class="time-val" id="hours">00</span><span class="time-label">Saat</span></div>
-                <div class="time-block"><span class="time-val" id="minutes">00</span><span class="time-label">DK</span></div>
-                <div class="time-block"><span class="time-val" id="seconds">00</span><span class="time-label">SN</span></div>
+                <div class="time-block"><span class="time-val" id="days">00</span><span class="time-label">GÜN</span></div>
+                <div class="time-block"><span class="time-val" id="hours">00</span><span class="time-label">SAAT</span></div>
+                <div class="time-block"><span class="time-val" id="minutes">00</span><span class="time-label">DAKİKA</span></div>
+                <div class="time-block"><span class="time-val" id="seconds">00</span><span class="time-label">SANİYE</span></div>
             </div>
         </section>
 
         <!-- NOTIFY -->
         <section class="scroll-anim">
             <h2 class="section-header">/Erisim_Talebi</h2>
-            <p style="color: var(--text-dim); max-width: 500px; margin-bottom: 1rem;">Sistem aktif olduğunda yetki erişimi almak için e-posta adresini terminale gönder.</p>
-            <form class="terminal-form" onsubmit="event.preventDefault(); alert('ERİŞİM TALEBİ ALINDI. [200 OK]');">
+            <p style="color: var(--text-dim); max-width: 500px; margin-bottom: 1rem;">Otonom sistem aktif olduğunda çekirdek erişimi almak için sinyal bırak.</p>
+            <form class="terminal-form" onsubmit="event.preventDefault(); alert('[200 OK] ERİŞİM TALEBİ ALINDI. AĞ BAĞLANTISI BEKLENİYOR.');">
                 <input type="email" placeholder="kullanici@host..." required>
-                <button type="submit">EXECUTE</button>
+                <button type="submit">EXECUTE.sh</button>
             </form>
         </section>
 
         <footer>
-            <span>&copy; 2026 Laugh Or Die. All Rights Reserved. // LOGGED OFF</span>
+            <span>&copy; 2026 Laugh Or Die. All Rights Reserved. // CONNECTION CLOSED</span>
         </footer>
 
     </div>
 
     <!-- SCRIPTS -->
     <script>
-        // --- 1. Müzik Başlatıcı (ORİJİNAL) ---
+        // --- 1. Müzik Başlatıcı (Mobil Uyumlu) ---
         const bgMusic = document.getElementById('bgMusic');
         bgMusic.volume = 0.5;
         let started = false;
 
         function startMusic() {
             if (started) return;
-            bgMusic.play().then(() => { started = true; }).catch(() => { /* Bekle */ });
+            // Catch handles iOS/Safari interaction requirements implicitly without failing script
+            bgMusic.play().then(() => { started = true; }).catch(e => { console.log('Waiting for user interaction'); });
         }
 
         window.addEventListener('DOMContentLoaded', startMusic);
         const events = ['click', 'mousemove', 'scroll', 'touchstart', 'keydown'];
-        events.forEach(eventType => document.addEventListener(eventType, startMusic, { once: true }));
+        events.forEach(eventType => document.addEventListener(eventType, startMusic, { once: true, passive: true }));
 
-        // --- 2. Geri Sayım Mantığı (ORİJİNAL - 15 Mayıs 2026) ---
+        // --- 2. Geri Sayım Mantığı ---
         const countDownDate = new Date("May 15, 2026 00:00:00").getTime();
         setInterval(function() {
             const now = new Date().getTime();
@@ -540,53 +542,60 @@
             document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
         }, 1000);
 
-        // --- 3. Hacker Text Effect ---
+        // --- 3. Hacker Text Effect (Mobil Uyumlu ve Güvenilir) ---
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
         
         document.querySelectorAll('.hacker-text').forEach(element => {
             const originalText = element.getAttribute('data-hacker-text');
+            if(!originalText) return;
             let interval = null;
 
-            element.onmouseover = event => {
+            function runEffect() {
                 let iteration = 0;
                 clearInterval(interval);
                 
                 interval = setInterval(() => {
-                    event.target.innerText = event.target.innerText
+                    element.innerText = originalText
                         .split("")
                         .map((letter, index) => {
                             if(index < iteration) { return originalText[index]; }
-                            return letters[Math.floor(Math.random() * 42)];
+                            return letters[Math.floor(Math.random() * letters.length)];
                         })
                         .join("");
                     
-                    if(iteration >= originalText.length){ clearInterval(interval); }
-                    iteration += 1 / 3; // Harf açılma hızını belirler
+                    if(iteration >= originalText.length){ clearInterval(interval); element.innerText = originalText; }
+                    iteration += 1 / 3;
                 }, 40);
             }
+
+            element.onmouseover = runEffect;
+            element.ontouchstart = runEffect; // Mobil tetikleme
             
-            // İlk tetikleme
-            setTimeout(() => { element.onmouseover({target: element}); }, 800);
+            setTimeout(runEffect, 500); // İlk yüklemede çalıştır
         });
 
-        // --- 4. Typewriter Quotes Effect ---
+        // --- 4. Dark/21st.dev Hacker Terminal Quotes ---
         const quotes = [
-            "Bağlantı kuruluyor... Güvenlik protokolleri aktif.",
-            "Yasal savunma mekanizmaları yükleniyor.",
+            "./start_laugh_or_die.sh",
+            "[OK] Loading autonomous agent configs...",
+            "[WARN] Reality is just a consensus of data. (21st.dev)",
             "Güvenlik bir ürün değil, bir süreçtir.",
             "Sistemin ne kadar güvenli olduğu, yöneticisinin paranoyasına bağlıdır.",
-            "Eğer bir sistem çalışıyorsa, sistemde kesinlikle bir hata vardır.",
-            "Gerçek dünya bir illüzyon, her şey veriden ibaret.",
-            "En tehlikeli açık, kodlarda değil insan psikolojisindedir.",
-            "Laugh Or Die: Çünkü siber dünyada bilgisizlik, en büyük zafiyettir."
+            "> En tehlikeli açık, kodlarda değil insan psikolojisindedir.",
+            "Ship AI-powered products. Hack the planet.",
+            "Eylem başlatılıyor... Affetmeyiz, unutmayız."
         ];
         
         const typeDest = document.getElementById("typewriter");
         let quoteIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
+        
+        // Önceki logları yukarı doğru kaydırmak için sanal bir terminal history
+        const termBody = document.getElementById("term-body");
 
         function typeWriter() {
+            if(!typeDest) return; // Mobil hatalarını önle
             const currentQuote = quotes[quoteIndex];
             
             if (isDeleting) {
@@ -597,24 +606,40 @@
                 charIndex++;
             }
 
-            let typeSpeed = Math.random() * 50 + 40; // typing effect 40-90ms
-            if (isDeleting) typeSpeed /= 3; // faster backspace
+            let typeSpeed = Math.random() * 30 + 30; 
+            if (isDeleting) typeSpeed /= 4; // Çok hızlı silinsin
 
             if (!isDeleting && charIndex === currentQuote.length) {
-                typeSpeed = 3500; // Ekranda kalma süresi
+                typeSpeed = 2500; 
                 isDeleting = true;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
+                
+                // Satırı tamamladığında geçmişe (history) ekle
+                if(termBody) {
+                    const newLine = document.createElement("div");
+                    newLine.className = "term-history";
+                    newLine.innerText = "> " + currentQuote;
+                    newLine.style.opacity = "0.4";
+                    newLine.style.fontSize = "0.85rem";
+                    termBody.insertBefore(newLine, termBody.lastElementChild);
+                    
+                    // Çok fazla log birikmesini engelle
+                    if(termBody.children.length > 5) {
+                        termBody.removeChild(termBody.children[1]); // İlk login text'i bırakıp sonrakini sil
+                    }
+                }
+
                 quoteIndex = (quoteIndex + 1) % quotes.length;
-                typeSpeed = 500; // Yeni söze başlamadan önceki bekleme
+                typeSpeed = 300; 
             }
 
             setTimeout(typeWriter, typeSpeed);
         }
-        setTimeout(typeWriter, 1200);
+        setTimeout(typeWriter, 1000);
 
         // --- 5. Scroll Animations ---
-        const observerOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -20px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -628,50 +653,51 @@
             observer.observe(el);
         });
 
-        // --- 6. Matrix Code Rain (Kırmızı Tonlarda, Rahatsız Etmeyen Saydamlıkta) ---
+        // --- 6. Matrix Code Rain (Performans İyileştirmeli) ---
         const canvas = document.getElementById('matrixCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // Binary tarzı rakamlar ve özel karakterler
-        const chars = '01#$@&*'.split('');
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = [];
-        for(let x = 0; x < columns; x++) drops[x] = 1;
-
-        function drawMatrix() {
-            // Arka plan soluklaştırması - bu değer ile matrix izlerinin ne kadar kalacağı belirlenir
-            ctx.fillStyle = 'rgba(3, 3, 5, 0.08)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if(canvas) {
+            const ctx = canvas.getContext('2d');
             
-            // Neon kırmızı matrix harfleri
-            ctx.fillStyle = '#E50914'; 
-            ctx.font = fontSize + 'px monospace';
-            
-            for(let i = 0; i < drops.length; i++) {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                
-                // Opaklık ayarlaması (aşağı inen stringler daha parlak, gerisi soluk kalacak)
-                ctx.globalAlpha = Math.random() > 0.5 ? Math.random() * 0.5 + 0.1 : 0.1;
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                ctx.globalAlpha = 1.0;
-                
-                // Aşağı indiğinde rastgele sıfırlanma
-                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
+            resizeCanvas();
+            
+            // Debounced resize (Mobil performansı için şarttır)
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(resizeCanvas, 200);
+            });
+
+            const chars = '01'.split('');
+            const fontSize = 14;
+            let columns = window.innerWidth / fontSize;
+            let drops = [];
+            for(let x = 0; x < 200; x++) drops[x] = 1; // Maksimum sütun sınırı koyuldu
+
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#ff003c'; 
+                ctx.font = fontSize + 'px monospace';
+                
+                columns = canvas.width / fontSize; // Dinamik genişlik kontrolü
+                
+                for(let i = 0; i < drops.length && i < columns; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            setInterval(drawMatrix, 50);
         }
-        setInterval(drawMatrix, 50);
     </script>
 </body>
 </html>
