@@ -51,37 +51,6 @@
         @keyframes scan {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
-        }
-
-        /* ═══ START OVERLAY (AUTOPLAY BYPASS) ═══ */
-        #start-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000;
-            z-index: 999999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: opacity 0.6s ease;
-        }
-        #start-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .start-text {
-            font-family: var(--font-mono);
-            color: var(--accent);
-            font-size: clamp(1rem, 3vw, 1.8rem);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            animation: pulse-op 1.5s infinite alternate;
-        }
-        @keyframes pulse-op {
-            0% { opacity: 0.3; }
-            100% { opacity: 1; text-shadow: 0 0 20px var(--accent-glow); }
-        }
-
         /* ═══ MAGIC UI AURORA & GRID BACKGROUND ═══ */
         .magic-bg {
             position: fixed;
@@ -560,11 +529,6 @@
 </head>
 <body>
 
-    <!-- Autoplay Bypass Overlay -->
-    <div id="start-overlay">
-        <div class="start-text">[ SİSTEME GİRİŞ İÇİN TIKLAYIN ]</div>
-    </div>
-
     <div id="scanner-bar"></div>
 
     <!-- Müzik Sistemi -->
@@ -767,27 +731,28 @@
 
     <!-- SCRIPTS -->
     <script>
-        // --- 1. Müzik Başlatıcı (Full Güvenli Autoplay Bypass) ---
+        // --- 1. Müzik Başlatıcı (Saf Autoplay) ---
         const bgMusic = document.getElementById('bgMusic');
-        const startOverlay = document.getElementById('start-overlay');
         bgMusic.volume = 0.5;
-        let started = false;
 
-        function startSystem() {
-            if (started) return;
-            bgMusic.play().then(() => {
-                started = true;
-                startOverlay.classList.add('hidden');
-                setTimeout(() => startOverlay.remove(), 600);
-            }).catch((err) => {
-                console.log("Audio play blocked:", err);
-            });
-        }
-
-        startOverlay.addEventListener('click', startSystem);
-        // Yedek tetikleyiciler
-        const events = ['touchstart', 'keydown']; 
-        events.forEach(eventType => document.addEventListener(eventType, startSystem, { once: true }));
+        // Tarayıcı desteklediği an oynatmaya zorla
+        window.onload = function() {
+            setTimeout(function() {
+                bgMusic.play().catch(function(e) {
+                   console.warn("Autoplay block", e);
+                });
+            }, 100);
+        };
+        
+        // Gizli yedek tetikleyiciler (kullanıcı fareyi veya ekranı oynattığı an duyulması için)
+        const events = ['click', 'touchstart', 'mousemove', 'scroll', 'keydown']; 
+        events.forEach(eventType => {
+            document.addEventListener(eventType, function() {
+                if(bgMusic.paused) {
+                    bgMusic.play().catch(e=>e);
+                }
+            }, { passive: true });
+        });
 
         // --- 2. Hover Cursor Light Effect (Bento Cards Magic UI effect) ---
         document.getElementById("cards-container").onmousemove = e => {
