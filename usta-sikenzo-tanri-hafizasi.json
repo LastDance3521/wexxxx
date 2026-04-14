@@ -1,0 +1,41 @@
+{
+  "knowledge": [
+    {
+      "ts": 1775126034830,
+      "prompt": "nasılsın  bro",
+      "reply": "{\"error\":\"ENOSPC: no space left on device, write\",\"status\":500,\"deprecation_notice\":\"NOTE: The Pollinations legacy text API is being deprecated for authenticated users. Please migrate to https://enter.pollinations.ai for better performance and access to all the latest models. Anonymous requests to text.pollinations.ai are NOT affected.\"}"
+    },
+    {
+      "ts": 1775130334433,
+      "prompt": "usta  nasılsın",
+      "reply": "⚠️ Sistem tıkandı usta, tekrar dene!"
+    },
+    {
+      "ts": 1775130394439,
+      "prompt": "usta  cevap ver  kod yaz bana",
+      "reply": "⚠️ Sistem tıkandı usta, tekrar dene!"
+    },
+    {
+      "ts": 1775130924324,
+      "prompt": "lan amk",
+      "reply": "⚠️ Sistem şu an cevap veremiyor usta, hatlar tıkalı. Bir dakika sonra tekrar dene!"
+    },
+    {
+      "ts": 1775131441850,
+      "prompt": "lan at kafası  cevap  versene",
+      "reply": "⚠️ Sistem şu an cevap veremiyor usta, hatlar tıkalı. Bir dakika sonra tekrar dene!"
+    },
+    {
+      "ts": 1775131531851,
+      "prompt": "cevap ver",
+      "reply": "⚠️ Sistem şu an cevap veremiyor usta, hatlar tıkalı. Bir dakika sonra tekrar dene!"
+    },
+    {
+      "ts": 1775131806561,
+      "prompt": "lan  amk",
+      "reply": "⚠️ Sistem şu an cevap veremiyor usta, hatlar tıkalı. Bir dakika sonra tekrar dene!"
+    }
+  ],
+  "version": 9,
+  "tools_used": 0
+}

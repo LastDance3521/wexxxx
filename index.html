@@ -3,90 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Laugh Or Die — Yeni platformumuz çok yakında yayında olacak. Yasal siber güvenlik eğitimleri, topluluk ve dahası.">
-    <title>Laugh Or Die — Yakında Gelecek</title>
+    <meta name="description" content="Laugh Or Die — Yakında. Yasal siber güvenlik eğitimleri ve daha fazlası.">
+    <title>Laugh Or Die — SİSTEM BAŞLATILIYOR...</title>
     <link rel="icon" type="image/png" href="logo.png">
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-color: #070709;
-            --surface-color: rgba(20, 20, 26, 0.6);
-            --border-color: rgba(255, 255, 255, 0.05);
-            --accent-red: #d32f2f;
-            --accent-dark: #7f0000;
-            --neon-glow: rgba(211, 47, 47, 0.4);
-            --text-main: #f5f5f5;
-            --text-muted: #9e9e9e;
+            --bg: #030305;
+            --accent: #E50914; /* Crimson Red */
+            --accent-glow: rgba(229, 9, 20, 0.4);
+            --text-main: #f0f0f0;
+            --text-dim: #888;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-sans: 'Inter', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--bg);
             color: var(--text-main);
-            line-height: 1.6;
+            font-family: var(--font-sans);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            cursor: crosshair; /* Hacker style crosshair */
         }
 
-        /* Ambient Background */
-        body::before {
-            content: '';
+        /* ═══ GRID & CANVA BACKGROUND ═══ */
+        #matrixCanvas {
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 50% 0%, rgba(127, 0, 0, 0.15) 0%, transparent 60%);
-            z-index: -2;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -3;
+            opacity: 0.15;
             pointer-events: none;
         }
 
-        /* Noise Texture */
+        /* Ambient Glow */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw; height: 80vh;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+            z-index: -2;
+            opacity: 0.3;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+
+        /* Scanline Overlay */
         body::after {
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
-            opacity: 0.025;
-            z-index: -1;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 50%,
+                rgba(0,0,0,0.2)
+            );
+            background-size: 100% 4px;
+            z-index: 9999;
             pointer-events: none;
+            opacity: 0.15;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        section { padding: 6rem 0; position: relative; }
-        
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            padding: 2rem;
             position: relative;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -15px; left: 50%;
-            transform: translateX(-50%);
-            width: 40px; height: 3px;
-            background: var(--accent-red);
-            border-radius: 2px;
-            box-shadow: 0 0 10px var(--neon-glow);
+            z-index: 10;
         }
 
-        /* ═══ HERO SECTION ═══ */
+        section {
+            padding: 6rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ═══ GLITCH EFFECT ═══ */
+        .glitch-wrapper {
+            position: relative;
+            margin: 1rem 0;
+        }
+        
+        .glitch {
+            position: relative;
+            font-size: 5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        }
+
+        .glitch::before {
+            left: 3px;
+            text-shadow: -2px 0 #00ffff;
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -3px;
+            text-shadow: -2px 0 var(--accent);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip-path: inset(20% 0 80% 0); }
+            20% { clip-path: inset(60% 0 10% 0); }
+            40% { clip-path: inset(40% 0 50% 0); }
+            60% { clip-path: inset(80% 0 5% 0); }
+            80% { clip-path: inset(10% 0 70% 0); }
+            100% { clip-path: inset(30% 0 50% 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(10% 0 60% 0); }
+            20% { clip-path: inset(30% 0 20% 0); }
+            40% { clip-path: inset(70% 0 10% 0); }
+            60% { clip-path: inset(50% 0 30% 0); }
+            80% { clip-path: inset(5% 0 80% 0); }
+            100% { clip-path: inset(40% 0 40% 0); }
+        }
+
+        /* ═══ HERO ═══ */
         .hero {
             display: flex;
             flex-direction: column;
@@ -94,402 +163,354 @@
             justify-content: center;
             min-height: 100vh;
             text-align: center;
-            padding-top: 4rem;
-            animation: fadeIn 1.5s ease;
+            padding-top: 2rem;
+            opacity: 1; /* override section default */
+            transform: translateY(0);
         }
 
-        .logo-wrapper {
+        .hero-logo-box {
             position: relative;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
+            animation: float 6s ease-in-out infinite;
         }
 
-        .logo-wrapper::before {
+        .hero-logo-box::after {
             content: '';
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 280px; height: 280px;
-            background: radial-gradient(circle, var(--neon-glow) 0%, transparent 70%);
+            width: 140%; height: 140%;
+            background: conic-gradient(from 0deg, transparent, var(--accent), transparent 40%);
             border-radius: 50%;
-            z-index: 1;
-            filter: blur(10px);
-            animation: pulseGlow 4s infinite alternate;
+            z-index: -1;
+            animation: spin 4s linear infinite;
+            filter: blur(20px);
+            opacity: 0.5;
+        }
+
+        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+        @keyframes float { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-15px); } 
         }
 
         .hero-logo {
-            width: 250px;
-            position: relative;
-            z-index: 2;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            width: 180px;
+            filter: drop-shadow(0 0 20px rgba(229, 9, 20, 0.5));
+            border-radius: 50%; /* in case it's squarish */
         }
 
-        .hero-main-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 5rem;
-            font-weight: 700;
-            font-style: italic;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff 30%, #b0b0b0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-subtitle {
+        .hacker-text {
+            font-family: var(--font-mono);
             font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--accent-red);
-            letter-spacing: 8px;
+            color: var(--accent);
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
             text-transform: uppercase;
-            margin-bottom: 2rem;
         }
 
-        .hero-desc {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 1rem;
-            font-weight: 300;
+        /* Terminal style subtitle */
+        .terminal-subtitle {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            color: var(--text-main);
+            max-width: 650px;
+            margin: 1.5rem auto 0;
+            background: rgba(10,10,15,0.7);
+            padding: 1.2rem 1.5rem;
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            border-left: 4px solid var(--accent);
+            text-align: left;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 4px;
+            line-height: 1.6;
         }
 
-        /* ═══ FEATURES SECTION ═══ */
-        .features-grid {
+        .terminal-subtitle::before {
+            content: 'root@laugh-or-die:~# ';
+            color: #00ff41; /* classic Matrix green for terminal prefix */
+        }
+
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-end infinite;
+            color: #00ff41;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ═══ GLASSMORPHISM BENTO CARDS ═══ */
+        .section-header {
+            font-family: var(--font-mono);
+            display: inline-block;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            position: relative;
+            color: #fff;
+        }
+        .section-header::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -8px; width: 50px; height: 3px;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
         }
 
-        .feature-card {
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+        .bento-card {
+            background: rgba(20, 20, 25, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
             padding: 2.5rem 2rem;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(211, 47, 47, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(211, 47, 47, 0.05);
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, rgba(229, 9, 20, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
-        .feature-card h3 {
-            font-size: 1.1rem;
+        .bento-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(229, 9, 20, 0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(229, 9, 20, 0.2);
+        }
+        .bento-card:hover::before { opacity: 1; }
+
+        .bento-card i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+        }
+
+        .bento-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
             font-weight: 600;
-            margin-bottom: 1rem;
             color: #fff;
-            letter-spacing: 1px;
         }
 
-        /* ═══ EDUCATION SECTION (LAWFUL CYBER SECURITY) ═══ */
-        .edu-section {
-            background: linear-gradient(180deg, rgba(10,10,12,0) 0%, rgba(30,5,5,0.4) 50%, rgba(10,10,12,0) 100%);
-            border-top: 1px solid rgba(211, 47, 47, 0.1);
-            border-bottom: 1px solid rgba(211, 47, 47, 0.1);
-        }
-
-        .edu-box {
-            background: rgba(10, 10, 15, 0.8);
-            border-left: 4px solid var(--accent-red);
-            padding: 3rem;
-            border-radius: 0 8px 8px 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        .edu-warning {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: rgba(211, 47, 47, 0.08);
-            border: 1px solid rgba(211, 47, 47, 0.2);
-            border-radius: 6px;
-        }
-
-        .edu-warning-text p {
+        .bento-card p {
             font-size: 0.95rem;
-            color: #dcdcdc;
-            margin-bottom: 0.5rem;
+            color: var(--text-dim);
+            line-height: 1.5;
         }
 
-        .edu-warning-text p:last-child { margin-bottom: 0; }
-        .edu-warning-text strong { color: var(--accent-red); }
-
-        .edu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .edu-item {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        
-        .edu-item::before {
-            content: '♦';
-            color: var(--accent-red);
-            font-size: 0.8rem;
-        }
-
-        /* ═══ COUNTDOWN SECTION ═══ */
-        .countdown-container {
+        /* ═══ COUNTDOWN (Cyberpunk Style) ═══ */
+        .countdown-wrapper {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
+            gap: 1.5rem;
+            flex-wrap: wrap;
         }
 
-        .count-box {
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            width: 100px;
-            height: 100px;
+        .time-block {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid rgba(229, 9, 20, 0.2);
+            padding: 1.5rem;
+            min-width: 120px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.4);
         }
 
-        .count-val {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+        .time-block::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 30px; height: 2px; background: var(--accent);
+        }
+
+        .time-val {
+            font-family: var(--font-mono);
+            font-size: 3.5rem;
             font-weight: 700;
             color: #fff;
+            text-shadow: 0 0 15px var(--accent-glow);
             line-height: 1;
         }
 
-        .count-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
+        .time-label {
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            color: var(--text-dim);
             margin-top: 0.5rem;
         }
 
-        /* ═══ NEWSLETTER SECTION ═══ */
-        .newsletter {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .news-form {
+        /* ═══ NOTIFY / COMMAND LINE FORM ═══ */
+        .terminal-form {
             display: flex;
-            margin-top: 2rem;
-            gap: 1rem;
+            max-width: 550px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            padding: 0.5rem;
+            margin-top: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
-
-        .news-input {
+        
+        .terminal-form input {
             flex: 1;
-            padding: 1rem 1.5rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
+            background: transparent;
+            border: none;
+            color: #fff; 
+            font-family: var(--font-mono);
+            padding: 0.8rem 1rem;
             outline: none;
-            transition: border-color 0.3s;
+            font-size: 1rem;
         }
 
-        .news-input:focus { border-color: rgba(211, 47, 47, 0.5); }
+        .terminal-form input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
 
-        .btn-submit {
-            padding: 0 2.5rem;
-            background: var(--accent-red);
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .terminal-form button {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 0.8rem 2rem;
+            font-family: var(--font-mono);
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
+            border-radius: 2px;
         }
 
-        .btn-submit:hover {
-            background: #b71c1c;
-            box-shadow: 0 0 15px var(--neon-glow);
-        }
-
-        /* ═══ SOCIAL & FOOTER ═══ */
-        .socials {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 3rem;
-        }
-
-        .social-link {
-            width: 50px; height: 50px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-            border: 1px solid transparent;
-        }
-
-        .social-link:hover {
-            background: rgba(211, 47, 47, 0.1);
+        .terminal-form button:hover {
+            background: var(--accent);
             color: #fff;
-            border-color: rgba(211, 47, 47, 0.4);
-            transform: translateY(-3px);
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
-        .footer {
+        /* Footer */
+        footer {
             text-align: center;
             padding: 3rem 0;
-            border-top: 1px solid var(--border-color);
-            margin-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 2rem;
         }
 
-        .footer p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
-        .footer .slogan { font-family: 'Playfair Display', serif; font-style: italic; color: #fff; }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulseGlow {
-            from { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
-            to { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .hero-main-title { font-size: 3.5rem; }
-            .news-form { flex-direction: column; }
-            .btn-submit { padding: 1rem; }
-            .edu-box { padding: 2rem 1.5rem; }
-            .countdown-container { gap: 1rem; flex-wrap: wrap; }
-            .count-box { width: 80px; height: 80px; }
-            .count-val { font-size: 1.8rem; }
+            .glitch { font-size: 3rem; }
+            .hero-logo { width: 140px; }
+            .time-block { min-width: 90px; padding: 1rem; }
+            .time-val { font-size: 2rem; }
+            .terminal-form { flex-direction: column; gap: 0.5rem; }
+            .terminal-form button { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Müzik Sistemi -->
+    <!-- Müzik Sistemi (Arka planda aynı mantık ile devam ediyor) -->
     <iframe src="trackkkk.mp3" allow="autoplay" style="display:none"></iframe>
     <audio id="bgMusic" autoplay loop>
         <source src="trackkkk.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="page-wrapper">
+    <canvas id="matrixCanvas"></canvas>
+
+    <div class="container">
         
         <!-- HERO -->
-        <section class="hero container">
-            <div class="logo-wrapper">
-                <!-- Logoya kesinlikle dokunulmamış, filtre uygulanmamış orijinal hali eklendi. -->
-                <img src="logo.png" alt="Laugh Or Die Logo" class="hero-logo">
+        <section class="hero visible">
+            <!-- Logonun orjinal bağlantısına hiç dokunmadık -->
+            <div class="hero-logo-box">
+                <img src="logo.png" alt="Laugh Or Die" class="hero-logo">
             </div>
             
-            <h1 class="hero-main-title">Laugh Or Die</h1>
-            <h2 class="hero-subtitle">Yakında Gelecek</h2>
+            <div data-hacker-text="SYSTEM_INITIATING..." class="hacker-text">INITIATING...</div>
             
-            <p class="hero-desc">Yeni platformumuz çok yakında yayında olacak.</p>
-            <p class="hero-desc">Topluluk, sohbet, içerik, yasal siber güvenlik eğitimleri ve daha fazlası çok yakında burada olacak.</p>
-        </section>
+            <div class="glitch-wrapper">
+                <h1 class="glitch" data-text="Laugh Or Die">Laugh Or Die</h1>
+            </div>
 
-        <!-- ÖZELLİKLER -->
-        <section class="container">
-            <h2 class="section-title">Platform Dinamikleri</h2>
-            <div class="features-grid">
-                <div class="feature-card"><h3>Topluluk Alanı</h3></div>
-                <div class="feature-card"><h3>Yazılı Sohbet</h3></div>
-                <div class="feature-card"><h3>Sesli İletişim</h3></div>
-                <div class="feature-card"><h3>Özel İçerikler</h3></div>
-                <div class="feature-card"><h3>Eğitim Modülleri</h3></div>
-                <div class="feature-card"><h3>Yasal Siber Güvenlik Dersleri</h3></div>
+            <div class="terminal-subtitle">
+                <span id="typewriter"></span><span class="typing-cursor"></span>
             </div>
         </section>
 
-        <!-- YASAL EGİTİM BÖLÜMÜ -->
-        <section class="edu-section">
-            <div class="container">
-                <h2 class="section-title">Yasal Siber Güvenlik Eğitimleri</h2>
-                
-                <div class="edu-box">
-                    <div class="edu-warning">
-                        <div class="edu-warning-text">
-                            <p><strong>YASAL VE ETİK UYARI:</strong> Platformumuzdaki tüm eğitimler tamamen <u>yasal ve etik</u> çerçevede sunulmaktadır.</p>
-                            <p>İçeriklerimiz sadece savunma, farkındalık, analiz ve güvenli laboratuvar eğitimi amaçlıdır. Gerçek sistemlere izinsiz erişim, zararlı yazılım geliştirme, veri hırsızlığı veya yasadışı faaliyetlere yönelik hiçbir içerik veya yönlendirme bulunmaz.</p>
-                        </div>
-                    </div>
-
-                    <div class="edu-grid">
-                        <div class="edu-item">Temel siber güvenlik farkındalığı</div>
-                        <div class="edu-item">Yasal OSINT mantığı</div>
-                        <div class="edu-item">Hesap ve şifre güvenliği</div>
-                        <div class="edu-item">2FA / MFA kullanımı</div>
-                        <div class="edu-item">Sosyal mühendislikten korunma</div>
-                        <div class="edu-item">Zararlı bağlantıları tanıma</div>
-                        <div class="edu-item">Güvenli cihaz kullanımı</div>
-                        <div class="edu-item">Web güvenliği temelleri</div>
-                        <div class="edu-item">Ağ güvenliği farkındalığı</div>
-                        <div class="edu-item">Güvenli test lab ortamları</div>
-                        <div class="edu-item">Savunma odaklı güvenlik analizleri</div>
-                    </div>
+        <!-- BENTO GRID (FEATURES) -->
+        <section class="scroll-anim">
+            <h2 class="section-header">/Sistem.Modulleri</h2>
+            <div class="bento-grid">
+                <div class="bento-card">
+                    <i class="fa-solid fa-user-ninja"></i>
+                    <h3>Yasal Siber Güvenlik</h3>
+                    <p>Tamamen yasal çerçevede, etik laboratuvar ortamlarında siber savunma tekniklerini ve analizleri derinlemesine öğrenin.</p>
+                </div>
+                <div class="bento-card">
+                    <i class="fa-solid fa-users-rays"></i>
+                    <h3>Kriptolu Topluluk Ağı</h3>
+                    <p>Alanında uzman kişilerle iletişim kurabileceğiniz güvenli, log tutmayan özel şifreli sohbet ve topluluk alanı.</p>
+                </div>
+                <div class="bento-card">
+                    <i class="fa-solid fa-terminal"></i>
+                    <h3>Etkileşimli Terminal</h3>
+                    <p>Sistem içi gömülü zafiyet araçları ile anlık komut pratikleri ve pratik OSINT iletişim modülleri.</p>
+                </div>
+                <div class="bento-card">
+                    <i class="fa-solid fa-shield-virus"></i>
+                    <h3>Farkındalık ve Savunma</h3>
+                    <p>Zararlı bağlantıları engelleme (Malware Analizi), 2FA/MFA kurulumları ve sistem pekiştirme temelleri.</p>
                 </div>
             </div>
         </section>
 
-        <!-- GERİ SAYIM -->
-        <section class="container">
-            <h2 class="section-title">Şafak Sayıyoruz</h2>
-            <div class="countdown-container">
-                <div class="count-box"><span class="count-val" id="days">00</span><span class="count-label">Gün</span></div>
-                <div class="count-box"><span class="count-val" id="hours">00</span><span class="count-label">Saat</span></div>
-                <div class="count-box"><span class="count-val" id="minutes">00</span><span class="count-label">Dakika</span></div>
-                <div class="count-box"><span class="count-val" id="seconds">00</span><span class="count-label">Saniye</span></div>
+        <!-- COUNTDOWN -->
+        <section class="scroll-anim" style="text-align: center;">
+            <h2 class="section-header" style="margin-bottom: 2rem;">/Safak.Zamani</h2>
+            <div class="countdown-wrapper">
+                <div class="time-block"><span class="time-val" id="days">00</span><span class="time-label">Gün</span></div>
+                <div class="time-block"><span class="time-val" id="hours">00</span><span class="time-label">Saat</span></div>
+                <div class="time-block"><span class="time-val" id="minutes">00</span><span class="time-label">DK</span></div>
+                <div class="time-block"><span class="time-val" id="seconds">00</span><span class="time-label">SN</span></div>
             </div>
         </section>
 
-        <!-- HABERDAR OL -->
-        <section class="container newsletter">
-            <h2 class="section-title" style="margin-bottom: 1rem;">Erken Erişim</h2>
-            <p style="color: var(--text-muted);">Sistem açıldığında ilk senin haberin olsun.</p>
-            
-            <form class="news-form" onsubmit="event.preventDefault(); alert('Kayıt alındı. Hazırlıklar tamamlandığında bilgilendirileceksiniz.');">
-                <input type="email" class="news-input" placeholder="E-posta adresiniz..." required>
-                <button type="submit" class="btn-submit">Haberdar Ol</button>
+        <!-- NOTIFY -->
+        <section class="scroll-anim">
+            <h2 class="section-header">/Erisim_Talebi</h2>
+            <p style="color: var(--text-dim); max-width: 500px; margin-bottom: 1rem;">Sistem aktif olduğunda yetki erişimi almak için e-posta adresini terminale gönder.</p>
+            <form class="terminal-form" onsubmit="event.preventDefault(); alert('ERİŞİM TALEBİ ALINDI. [200 OK]');">
+                <input type="email" placeholder="kullanici@host..." required>
+                <button type="submit">EXECUTE</button>
             </form>
-
-            <div class="socials">
-                <a href="#" class="social-link" title="Discord"><i class="fa-brands fa-discord"></i></a>
-                <a href="#" class="social-link" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
-                <a href="#" class="social-link" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" class="social-link" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            </div>
         </section>
 
-        <!-- FOOTER -->
-        <footer class="footer container">
-            <p>&copy; 2026 Laugh Or Die. Tüm hakları saklıdır.</p>
-            <p class="slogan">Legal education. Community. Communication.</p>
+        <footer>
+            <span>&copy; 2026 Laugh Or Die. All Rights Reserved. // LOGGED OFF</span>
         </footer>
 
     </div>
 
-    <!-- Müzik ve Timer Scripti -->
+    <!-- SCRIPTS -->
     <script>
-        // Müzik Başlatıcı (Tarayıcı Engelini Aşmak İçin En Temiz Yöntem)
+        // --- 1. Müzik Başlatıcı (ORİJİNAL) ---
         const bgMusic = document.getElementById('bgMusic');
         bgMusic.volume = 0.5;
         let started = false;
@@ -503,14 +524,11 @@
         const events = ['click', 'mousemove', 'scroll', 'touchstart', 'keydown'];
         events.forEach(eventType => document.addEventListener(eventType, startMusic, { once: true }));
 
-        // Geri Sayım Mantığı (Gerçek ve Sabit Tarih)
-        // Platformun açılacağı hedef tarihi buraya girebilirsiniz.
+        // --- 2. Geri Sayım Mantığı (ORİJİNAL - 15 Mayıs 2026) ---
         const countDownDate = new Date("May 15, 2026 00:00:00").getTime();
-        
         setInterval(function() {
             const now = new Date().getTime();
             const distance = countDownDate - now;
-            
             let days = Math.floor(distance / (1000 * 60 * 60 * 24));
             let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -521,6 +539,139 @@
             document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
             document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
         }, 1000);
+
+        // --- 3. Hacker Text Effect ---
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+        
+        document.querySelectorAll('.hacker-text').forEach(element => {
+            const originalText = element.getAttribute('data-hacker-text');
+            let interval = null;
+
+            element.onmouseover = event => {
+                let iteration = 0;
+                clearInterval(interval);
+                
+                interval = setInterval(() => {
+                    event.target.innerText = event.target.innerText
+                        .split("")
+                        .map((letter, index) => {
+                            if(index < iteration) { return originalText[index]; }
+                            return letters[Math.floor(Math.random() * 42)];
+                        })
+                        .join("");
+                    
+                    if(iteration >= originalText.length){ clearInterval(interval); }
+                    iteration += 1 / 3; // Harf açılma hızını belirler
+                }, 40);
+            }
+            
+            // İlk tetikleme
+            setTimeout(() => { element.onmouseover({target: element}); }, 800);
+        });
+
+        // --- 4. Typewriter Quotes Effect ---
+        const quotes = [
+            "Bağlantı kuruluyor... Güvenlik protokolleri aktif.",
+            "Yasal savunma mekanizmaları yükleniyor.",
+            "Güvenlik bir ürün değil, bir süreçtir.",
+            "Sistemin ne kadar güvenli olduğu, yöneticisinin paranoyasına bağlıdır.",
+            "Eğer bir sistem çalışıyorsa, sistemde kesinlikle bir hata vardır.",
+            "Gerçek dünya bir illüzyon, her şey veriden ibaret.",
+            "En tehlikeli açık, kodlarda değil insan psikolojisindedir.",
+            "Laugh Or Die: Çünkü siber dünyada bilgisizlik, en büyük zafiyettir."
+        ];
+        
+        const typeDest = document.getElementById("typewriter");
+        let quoteIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeWriter() {
+            const currentQuote = quotes[quoteIndex];
+            
+            if (isDeleting) {
+                typeDest.innerHTML = currentQuote.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typeDest.innerHTML = currentQuote.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = Math.random() * 50 + 40; // typing effect 40-90ms
+            if (isDeleting) typeSpeed /= 3; // faster backspace
+
+            if (!isDeleting && charIndex === currentQuote.length) {
+                typeSpeed = 3500; // Ekranda kalma süresi
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                quoteIndex = (quoteIndex + 1) % quotes.length;
+                typeSpeed = 500; // Yeni söze başlamadan önceki bekleme
+            }
+
+            setTimeout(typeWriter, typeSpeed);
+        }
+        setTimeout(typeWriter, 1200);
+
+        // --- 5. Scroll Animations ---
+        const observerOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-anim').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // --- 6. Matrix Code Rain (Kırmızı Tonlarda, Rahatsız Etmeyen Saydamlıkta) ---
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Binary tarzı rakamlar ve özel karakterler
+        const chars = '01#$@&*'.split('');
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        for(let x = 0; x < columns; x++) drops[x] = 1;
+
+        function drawMatrix() {
+            // Arka plan soluklaştırması - bu değer ile matrix izlerinin ne kadar kalacağı belirlenir
+            ctx.fillStyle = 'rgba(3, 3, 5, 0.08)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Neon kırmızı matrix harfleri
+            ctx.fillStyle = '#E50914'; 
+            ctx.font = fontSize + 'px monospace';
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                
+                // Opaklık ayarlaması (aşağı inen stringler daha parlak, gerisi soluk kalacak)
+                ctx.globalAlpha = Math.random() > 0.5 ? Math.random() * 0.5 + 0.1 : 0.1;
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                ctx.globalAlpha = 1.0;
+                
+                // Aşağı indiğinde rastgele sıfırlanma
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
     </script>
 </body>
 </html>
