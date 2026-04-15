@@ -63,7 +63,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
+            cursor: default;
             transition: opacity 0.8s ease, transform 0.8s ease;
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
@@ -723,7 +723,7 @@
                 <div class="overlay-subtitle">// Otonom Sistem v2.0</div>
             </div>
 
-            <button class="enter-btn">[ SİSTEME GİRİŞ ]</button>
+            <button class="enter-btn" id="enter-btn">[ SİSTEME GİRİŞ ]</button>
 
             <div class="status-line">ENCRYPTED CHANNEL <span>●</span> READY</div>
         </div>
@@ -732,8 +732,7 @@
     <div id="scanner-bar"></div>
 
     <!-- Müzik Sistemi -->
-    <iframe src="trackkkk.mp3" allow="autoplay" style="display:none" aria-hidden="true"></iframe>
-    <audio id="bgMusic" autoplay loop>
+    <audio id="bgMusic" loop>
         <source src="trackkkk.mp3" type="audio/mpeg">
     </audio>
 
@@ -947,9 +946,14 @@
             });
         }
 
-        startOverlay.addEventListener('click', launchSystem);
-        startOverlay.addEventListener('touchend', function(e) {
+        const enterBtn = document.getElementById('enter-btn');
+        enterBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            launchSystem();
+        });
+        enterBtn.addEventListener('touchend', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             launchSystem();
         });
 
